@@ -41,7 +41,7 @@
             border-radius: 5px 20px 20px 5px;
             box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.08);
             padding: 2.5em 3em 3em 4em;
-            max-width: 650px;
+            max-width: 900px;
             width: 100%;
             position: relative;
         }
@@ -118,7 +118,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Forms & Inputs */
-        .section { background: rgba(255,255,255,0.6); padding: 20px; border-radius: 15px; border: 2px dashed var(--pastel-blue); }
+        .section { background: rgba(255,255,255,0.6); padding: 20px; border-radius: 15px; border: 2px dashed var(--pastel-blue); max-height: 70vh; overflow-y: auto; }
         label { display: block; font-weight: 700; color: var(--pastel-purple); margin-bottom: 5px; font-size: 0.9rem; }
         input, select { font-family: 'Nunito', sans-serif; width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 8px; border: 2px solid var(--pastel-blue); box-sizing: border-box; outline: none; }
         input:focus, select:focus { border-color: var(--pastel-purple); }
@@ -133,6 +133,26 @@
         .calendar-day { padding: 8px 0; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s;}
         .calendar-day:hover { background: var(--pastel-pink); color: #fff; }
         .calendar-day.selected { background: var(--pastel-purple); color: #fff; transform: scale(1.05); }
+
+        /* Weekly Schedule */
+        .weekly-schedule { background: #fff; border: 2px dashed var(--pastel-purple); border-radius: 12px; padding: 20px; margin-bottom: 20px; overflow-x: auto; }
+        .schedule-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .schedule-header h3 { margin: 0; color: var(--pastel-purple); }
+        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+        .day-col { border: 2px dashed var(--pastel-blue); border-radius: 8px; padding: 10px; min-height: 600px; position: relative; }
+        .day-col-header { font-weight: 700; color: var(--pastel-purple); text-align: center; padding-bottom: 10px; border-bottom: 2px solid var(--pastel-pink); margin-bottom: 10px; }
+        .time-slot { font-size: 0.75rem; color: #999; margin-top: 5px; }
+        .class-event { background: var(--pastel-pink); border-radius: 6px; padding: 6px; margin: 5px 0; font-size: 0.8rem; color: var(--text-main); border-left: 4px solid var(--pastel-pink-dark); }
+        .class-event-title { font-weight: 700; }
+        .class-event-info { font-size: 0.7rem; }
+
+        /* Month Schedule */
+        .month-schedule { background: #fff; border: 2px dashed var(--pastel-purple); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+        .month-day { border: 2px solid var(--pastel-blue); border-radius: 8px; padding: 8px; min-height: 80px; background: rgba(255,255,255,0.8); }
+        .month-day-num { font-weight: 700; color: var(--pastel-purple); margin-bottom: 5px; font-size: 0.9rem; }
+        .month-class { background: var(--pastel-pink); border-radius: 4px; padding: 2px 4px; margin: 2px 0; font-size: 0.65rem; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .month-class.highlight { background: var(--pastel-purple); color: #fff; }
 
         /* Directory UI */
         .search-bar { background: #fff; border: 2px solid var(--pastel-purple); box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
@@ -155,6 +175,14 @@
         .attendance-item { display: flex; align-items: center; padding: 10px; background: rgba(255,255,255,0.5); border-radius: 8px; margin-bottom: 10px; }
         .attendance-item input[type="checkbox"] { margin-right: 10px; width: 18px; height: 18px; cursor: pointer; }
         .attendance-item label { margin: 0; flex: 1; cursor: pointer; }
+
+        /* Rate Options */
+        .rate-option-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .rate-option { flex: 1; }
+        .rate-option input[type="radio"] { margin-right: 5px; }
+        .rate-option label { display: inline; margin-bottom: 0; }
+        .hours-input { display: none; }
+        .hours-input.show { display: block; }
     </style>
 </head>
 <body>
@@ -162,19 +190,21 @@
     <div class="notebook">
         <div class="tape"></div>
         <h1>
-            ✨ Tutor Notes ✨
+            ✨ Miss C's Classroom ✨
             <span id="cloudStatus" class="cloud-status">⚠️ Offline Mode (Data saves to this device only)</span>
         </h1>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab(event, 'homeTab')">🏠 Log Class</button>
+            <button class="tab-btn" onclick="openTab(event, 'scheduleTab')">📅 Weekly Schedule</button>
+            <button class="tab-btn" onclick="openTab(event, 'monthTab')">📆 Month Planner</button>
             <button class="tab-btn" onclick="openTab(event, 'directoryTab')">📋 Directory</button>
             <button class="tab-btn" onclick="openTab(event, 'addTab')">➕ Add Student</button>
         </div>
 
         <!-- HOME TAB -->
         <div id="homeTab" class="tab-content active section">
-            <h3>📅 Log Attendance</h3>
+            <h3>📅 Log Attendance - <span id="selectedDayDisplay">Today</span></h3>
             <div class="calendar-container">
                 <div class="calendar-header">
                     <button onclick="changeMonth(-1)">◀</button>
@@ -184,7 +214,7 @@
                 <div class="calendar-grid" id="calendarGrid"></div>
             </div>
 
-            <label>Select Class</label>
+            <label>Classes on <span id="selectedClassDay">Thursday</span></label>
             <select id="attendanceClass" onchange="updateAttendanceStudents()">
                 <option>Loading...</option>
             </select>
@@ -193,6 +223,36 @@
             <div id="attendanceStudentsList"></div>
             
             <button onclick="logAttendance()" style="background-color: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7;">Save Session 🌿</button>
+        </div>
+
+        <!-- WEEKLY SCHEDULE TAB -->
+        <div id="scheduleTab" class="tab-content section">
+            <h3>📅 Weekly Schedule</h3>
+            <div class="schedule-header">
+                <h3 style="margin-bottom: 0;">Week of <span id="weekDisplay">Monday</span></h3>
+                <div>
+                    <button onclick="changeWeek(-1)" style="width: auto; padding: 8px 15px; margin-right: 5px;">◀ Prev</button>
+                    <button onclick="changeWeek(1)" style="width: auto; padding: 8px 15px;">Next ▶</button>
+                </div>
+            </div>
+            <div class="weekly-schedule">
+                <div class="week-grid" id="weekGrid"></div>
+            </div>
+        </div>
+
+        <!-- MONTH PLANNER TAB -->
+        <div id="monthTab" class="tab-content section">
+            <h3>📆 Month Planner</h3>
+            <div class="schedule-header">
+                <h3 style="margin-bottom: 0;">Month: <span id="monthPlannerDisplay">Month Year</span></h3>
+                <div>
+                    <button onclick="changeMonthPlan(-1)" style="width: auto; padding: 8px 15px; margin-right: 5px;">◀ Prev</button>
+                    <button onclick="changeMonthPlan(1)" style="width: auto; padding: 8px 15px;">Next ▶</button>
+                </div>
+            </div>
+            <div class="month-schedule">
+                <div class="month-grid" id="monthGrid"></div>
+            </div>
         </div>
 
         <!-- DIRECTORY TAB -->
@@ -242,8 +302,25 @@
                 <label>Class Time End (24h) *</label>
                 <input type="time" id="classTimeEnd">
 
-                <label>Rate per Session ($) *</label>
+                <label>Rate Type *</label>
+                <div class="rate-option-group">
+                    <div class="rate-option">
+                        <input type="radio" id="rateSession" name="rateType" value="session" checked onchange="toggleHoursInput()">
+                        <label for="rateSession">Per Session</label>
+                    </div>
+                    <div class="rate-option">
+                        <input type="radio" id="rateHour" name="rateType" value="hour" onchange="toggleHoursInput()">
+                        <label for="rateHour">Per Hour</label>
+                    </div>
+                </div>
+
+                <label>Rate ($) *</label>
                 <input type="number" id="rate" placeholder="e.g. 50">
+
+                <div id="hoursInput" class="hours-input">
+                    <label>Hours per Session *</label>
+                    <input type="number" id="hoursPerSession" placeholder="e.g. 1.5" step="0.5">
+                </div>
             </div>
 
             <button onclick="addStudent()">Save Student 💖</button>
@@ -274,6 +351,8 @@
         let currentDate = new Date();
         let selectedDate = new Date();
         let selectedAttendance = {};
+        let scheduleDate = new Date();
+        let monthPlanDate = new Date();
 
         // --- FIREBASE INIT ---
         let db;
@@ -301,6 +380,8 @@
             document.getElementById(id).classList.add('active');
             e.currentTarget.classList.add('active');
             if(id === 'directoryTab') renderDirectory();
+            if(id === 'scheduleTab') renderWeekSchedule();
+            if(id === 'monthTab') renderMonthSchedule();
         };
 
         // --- CALENDAR LOGIC ---
@@ -327,7 +408,9 @@
 
         window.selectDate = (day) => {
             selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+            updateSelectedDayDisplay();
             renderCalendar();
+            updateAttendanceClass();
         };
 
         window.changeMonth = (dir) => {
@@ -335,7 +418,40 @@
             renderCalendar();
         };
 
-        // --- ATTENDANCE LOGIC ---
+        // --- HOME PAGE LOGIC ---
+        window.updateSelectedDayDisplay = () => {
+            const dayName = daysOrder[selectedDate.getDay() === 0 ? 6 : selectedDate.getDay() - 1];
+            document.getElementById('selectedDayDisplay').innerText = selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            document.getElementById('selectedClassDay').innerText = dayName;
+            updateAttendanceClass();
+        };
+
+        window.updateAttendanceClass = () => {
+            const dayName = daysOrder[selectedDate.getDay() === 0 ? 6 : selectedDate.getDay() - 1];
+            const sel = document.getElementById('attendanceClass');
+            const classOptions = new Set();
+            
+            Object.keys(students).forEach(name => {
+                const s = students[name];
+                if (s.day === dayName) {
+                    const key = `${s.day}|${s.course || 'General'}`;
+                    classOptions.add(key);
+                }
+            });
+
+            if (classOptions.size === 0) {
+                sel.innerHTML = `<option disabled selected>No classes on ${dayName}</option>`;
+                document.getElementById('attendanceStudentsList').innerHTML = '';
+            } else {
+                const options = Array.from(classOptions).sort();
+                sel.innerHTML = options.map(key => {
+                    const [day, course] = key.split('|');
+                    return `<option value="${key}">${course}</option>`;
+                }).join('');
+                updateAttendanceStudents();
+            }
+        };
+
         window.updateAttendanceStudents = () => {
             const classKey = document.getElementById('attendanceClass').value;
             const cont = document.getElementById('attendanceStudentsList');
@@ -363,10 +479,12 @@
                 const isAttended = s.sessions && s.sessions.includes(dateStr);
                 selectedAttendance[name] = isAttended;
 
+                const rateDisplay = s.rateType === 'hour' ? `$${s.rate} / hour (${s.hoursPerSession}h)` : `$${s.rate} / session`;
+
                 cont.innerHTML += `
                     <div class="attendance-item">
                         <input type="checkbox" id="check-${name}" ${isAttended ? 'checked' : ''} onchange="selectedAttendance['${name}'] = this.checked">
-                        <label for="check-${name}"><strong>${name}</strong> - ${s.course} ($$${s.rate || 0})</label>
+                        <label for="check-${name}"><strong>${name}</strong> - ${s.course} (${rateDisplay})</label>
                     </div>
                 `;
             });
@@ -401,47 +519,127 @@
             }
         };
 
-        // --- DATA LOGIC ---
-        window.addStudent = async () => {
-            const name = document.getElementById('studentName').value.trim();
-            const course = document.getElementById('courseName').value.trim() || "General";
-            const phone = document.getElementById('phone').value.trim();
-            const socials = document.getElementById('socials').value.trim();
-            const day = document.getElementById('dayOfWeek').value;
-            const timeStart = document.getElementById('classTimeStart').value;
-            const timeEnd = document.getElementById('classTimeEnd').value;
-            const rate = document.getElementById('rate').value;
-            
-            if(!name) return showMsg("Please enter a student name! 🎀");
-            if(!timeStart || !timeEnd) return showMsg("Please set class time range! ⏰");
-
-            students[name] = { 
-                course, phone, socials, day, timeStart, timeEnd, rate, 
-                sessions: students[name] ? students[name].sessions : [] 
-            };
-            
-            await save();
-            showMsg(`Successfully added ${name}! 💖`);
-            
-            // Clear inputs
-            document.getElementById('studentName').value = '';
-            document.getElementById('courseName').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('socials').value = '';
-            document.getElementById('classTimeStart').value = '';
-            document.getElementById('classTimeEnd').value = '';
-            document.getElementById('rate').value = '';
+        // --- WEEKLY SCHEDULE LOGIC ---
+        window.getWeekStart = (date) => {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust to start Monday
+            return new Date(d.setDate(diff));
         };
 
-        window.deleteStudent = async (name) => {
-            if(confirm(`Are you sure you want to remove ${name} from your directory?`)) {
-                delete students[name];
-                await save();
-                renderDirectory();
-                showMsg(`Removed ${name}. 🗑️`);
+        window.renderWeekSchedule = () => {
+            const weekStart = getWeekStart(scheduleDate);
+            const weekGrid = document.getElementById('weekGrid');
+            weekGrid.innerHTML = '';
+
+            document.getElementById('weekDisplay').innerText = `${weekStart.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})} - ${new Date(weekStart.getTime() + 6*24*60*60*1000).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}`;
+
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(weekStart.getTime() + i*24*60*60*1000);
+                const dayName = daysOrder[i];
+                const dayNum = dayDate.getDate();
+                
+                let dayHTML = `
+                    <div class="day-col">
+                        <div class="day-col-header">${dayName}<br><span style="font-size: 0.8rem;">${dayNum}</span></div>
+                `;
+
+                // Get classes for this day
+                const dayClasses = Object.keys(students).filter(name => students[name].day === dayName);
+                const classesMap = {};
+                
+                dayClasses.forEach(name => {
+                    const s = students[name];
+                    const key = `${s.course}|${s.timeStart}|${s.timeEnd}`;
+                    if (!classesMap[key]) classesMap[key] = [];
+                    classesMap[key].push(name);
+                });
+
+                for (let key in classesMap) {
+                    const [course, start, end] = key.split('|');
+                    const count = classesMap[key].length;
+                    dayHTML += `
+                        <div class="class-event">
+                            <div class="class-event-title">${course}</div>
+                            <div class="class-event-info">${start} - ${end}</div>
+                            <div class="class-event-info">👥 ${count} student${count > 1 ? 's' : ''}</div>
+                        </div>
+                    `;
+                }
+
+                dayHTML += `</div>`;
+                weekGrid.innerHTML += dayHTML;
             }
         };
 
+        window.changeWeek = (dir) => {
+            scheduleDate.setDate(scheduleDate.getDate() + (dir * 7));
+            renderWeekSchedule();
+        };
+
+        // --- MONTH SCHEDULE LOGIC ---
+        window.renderMonthSchedule = () => {
+            const monthGrid = document.getElementById('monthGrid');
+            monthGrid.innerHTML = '';
+
+            const y = monthPlanDate.getFullYear(), m = monthPlanDate.getMonth();
+            document.getElementById('monthPlannerDisplay').innerText = `${new Intl.DateTimeFormat('en-US', {month:'long'}).format(monthPlanDate)} ${y}`;
+
+            // Day headers
+            const dayHeaders = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            dayHeaders.forEach(d => {
+                let headerHTML = `<div class="month-day" style="background: var(--pastel-blue); color: white; font-weight: 700; text-align: center; padding: 10px;"><strong>${d}</strong></div>`;
+                monthGrid.innerHTML += headerHTML;
+            });
+
+            const firstDay = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m+1, 0).getDate();
+            const adjustedFirst = firstDay === 0 ? 6 : firstDay - 1;
+
+            // Empty cells before month starts
+            for(let i = 0; i < adjustedFirst; i++) {
+                monthGrid.innerHTML += '<div class="month-day" style="background: #f0f0f0;"></div>';
+            }
+
+            // Days of month
+            for(let i = 1; i <= daysInMonth; i++) {
+                const dayDate = new Date(y, m, i);
+                const dayOfWeekIndex = dayDate.getDay() === 0 ? 6 : dayDate.getDay() - 1;
+                const dayName = daysOrder[dayOfWeekIndex];
+                const today = new Date();
+                const isToday = today.getDate() === i && today.getMonth() === m && today.getFullYear() === y;
+
+                let dayHTML = `
+                    <div class="month-day ${isToday ? 'highlight' : ''}" style="${isToday ? 'background: var(--pastel-purple); color: white;' : ''}">
+                        <div class="month-day-num" style="${isToday ? 'color: white;' : ''}">${i}</div>
+                `;
+
+                // Get classes for this day
+                const dayClasses = Object.keys(students).filter(name => students[name].day === dayName);
+                const classesMap = {};
+                
+                dayClasses.forEach(name => {
+                    const s = students[name];
+                    if (!classesMap[s.course]) classesMap[s.course] = 0;
+                    classesMap[s.course]++;
+                });
+
+                for (let course in classesMap) {
+                    const count = classesMap[course];
+                    dayHTML += `<div class="month-class" ${isToday ? 'style="background: rgba(255,255,255,0.2);"' : ''}>${course} (${count})</div>`;
+                }
+
+                dayHTML += `</div>`;
+                monthGrid.innerHTML += dayHTML;
+            }
+        };
+
+        window.changeMonthPlan = (dir) => {
+            monthPlanDate.setMonth(monthPlanDate.getMonth() + dir);
+            renderMonthSchedule();
+        };
+
+        // --- DIRECTORY LOGIC ---
         window.renderDirectory = () => {
             const cont = document.getElementById('directoryContainer');
             const filterText = document.getElementById('dirFilter').value.toLowerCase();
@@ -450,7 +648,6 @@
             let hasResults = false;
 
             daysOrder.forEach(day => {
-                // Find students for this day that match the filter
                 const dayStudents = Object.keys(students).filter(name => {
                     const s = students[name];
                     const matchesDay = s.day === day;
@@ -464,7 +661,6 @@
                     hasResults = true;
                     cont.innerHTML += `<div class="day-header">📅 ${day}</div>`;
 
-                    // Group by Course Name
                     const courses = {};
                     dayStudents.forEach(name => {
                         const courseName = students[name].course || "General";
@@ -472,7 +668,6 @@
                         courses[courseName].push(name);
                     });
 
-                    // Render Courses and their Students
                     for (let cName in courses) {
                         cont.innerHTML += `<div class="class-header">🏫 Course: ${cName}</div>`;
                         
@@ -480,6 +675,7 @@
                         courses[cName].forEach(name => {
                             const s = students[name];
                             const timeRange = `${s.timeStart || 'TBD'} - ${s.timeEnd || 'TBD'}`;
+                            const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h/session)` : `$${s.rate}/session`;
                             gridHTML += `
                                 <div class="student-card">
                                     <button class="delete-btn" onclick="deleteStudent('${name}')" title="Delete">✖</button>
@@ -488,7 +684,7 @@
                                     <p>📞 <strong>Tel:</strong> ${s.phone || 'N/A'}</p>
                                     <p>💬 <strong>Social:</strong> ${s.socials || 'N/A'}</p>
                                     <hr style="border: 0; border-top: 1px dashed var(--pastel-pink); margin: 10px 0;">
-                                    <p>💰 <strong>Rate:</strong> $${s.rate || 0} / session</p>
+                                    <p>💰 <strong>Rate:</strong> ${rateDisplay}</p>
                                     <p>📝 <strong>Logs:</strong> ${s.sessions ? s.sessions.length : 0} classes</p>
                                 </div>
                             `;
@@ -505,25 +701,67 @@
             }
         };
 
-        function updateUI() {
-            const sel = document.getElementById('attendanceClass');
-            const classOptions = new Set();
-            
-            Object.keys(students).forEach(name => {
-                const s = students[name];
-                const key = `${s.day}|${s.course || 'General'}`;
-                classOptions.add(key);
-            });
-
-            if (classOptions.size === 0) {
-                sel.innerHTML = `<option disabled selected>No classes added yet</option>`;
+        // --- RATE TYPE TOGGLE ---
+        window.toggleHoursInput = () => {
+            const hoursInput = document.getElementById('hoursInput');
+            const rateHour = document.getElementById('rateHour').checked;
+            if (rateHour) {
+                hoursInput.classList.add('show');
             } else {
-                const options = Array.from(classOptions).sort();
-                sel.innerHTML = options.map(key => {
-                    const [day, course] = key.split('|');
-                    return `<option value="${key}">${day} - ${course}</option>`;
-                }).join('');
+                hoursInput.classList.remove('show');
             }
+        };
+
+        // --- DATA LOGIC ---
+        window.addStudent = async () => {
+            const name = document.getElementById('studentName').value.trim();
+            const course = document.getElementById('courseName').value.trim() || "General";
+            const phone = document.getElementById('phone').value.trim();
+            const socials = document.getElementById('socials').value.trim();
+            const day = document.getElementById('dayOfWeek').value;
+            const timeStart = document.getElementById('classTimeStart').value;
+            const timeEnd = document.getElementById('classTimeEnd').value;
+            const rateType = document.querySelector('input[name="rateType"]:checked').value;
+            const rate = document.getElementById('rate').value;
+            const hoursPerSession = document.getElementById('hoursPerSession').value;
+            
+            if(!name) return showMsg("Please enter a student name! 🎀");
+            if(!timeStart || !timeEnd) return showMsg("Please set class time range! ⏰");
+            if(!rate) return showMsg("Please enter a rate! 💰");
+            if(rateType === 'hour' && !hoursPerSession) return showMsg("Please enter hours per session! ⏰");
+
+            students[name] = { 
+                course, phone, socials, day, timeStart, timeEnd, rateType, rate, 
+                hoursPerSession: rateType === 'hour' ? hoursPerSession : null,
+                sessions: students[name] ? students[name].sessions : [] 
+            };
+            
+            await save();
+            showMsg(`Successfully added ${name}! 💖`);
+            
+            document.getElementById('studentName').value = '';
+            document.getElementById('courseName').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('socials').value = '';
+            document.getElementById('classTimeStart').value = '';
+            document.getElementById('classTimeEnd').value = '';
+            document.getElementById('rate').value = '';
+            document.getElementById('hoursPerSession').value = '';
+            document.getElementById('rateSession').checked = true;
+            document.getElementById('hoursInput').classList.remove('show');
+        };
+
+        window.deleteStudent = async (name) => {
+            if(confirm(`Are you sure you want to remove ${name} from your directory?`)) {
+                delete students[name];
+                await save();
+                renderDirectory();
+                showMsg(`Removed ${name}. 🗑️`);
+            }
+        };
+
+        function updateUI() {
+            updateAttendanceClass();
         }
 
         async function save() {
@@ -544,7 +782,8 @@
 
         // Initialize App
         renderCalendar();
-        updateUI();
+        updateSelectedDayDisplay();
+        renderMonthSchedule();
         
     </script>
 </body>
