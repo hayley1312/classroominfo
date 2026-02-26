@@ -12,8 +12,6 @@
             --line-color: #e1e8ed; 
             --margin-line: #ffadad; 
             --text-main: #5c4d4d; 
-            
-            /* Pastel Accents */
             --pastel-pink: #ffc8dd;
             --pastel-pink-dark: #ffafcc;
             --pastel-blue: #bde0fe;
@@ -36,7 +34,6 @@
             min-height: 100vh;
         }
 
-        /* The Notebook Container */
         .notebook {
             background-color: var(--paper-color);
             background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
@@ -50,63 +47,40 @@
             position: relative;
         }
 
-        /* Binder holes */
         .notebook::before {
             content: '';
             position: absolute;
-            top: 0; 
-            bottom: 0; 
-            left: 15px;
-            width: 20px;
+            top: 0; bottom: 0; left: 15px; width: 20px;
             background-image: radial-gradient(circle, var(--bg-color) 6px, transparent 7px);
             background-size: 100% 4em;
             background-repeat: repeat-y;
         }
 
-        /* Cute tape decoration */
         .tape {
             background-color: rgba(255, 255, 255, 0.4);
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            width: 100px;
-            height: 30px;
-            position: absolute;
-            top: -15px;
-            left: 50%;
+            width: 100px; height: 30px;
+            position: absolute; top: -15px; left: 50%;
             transform: translateX(-50%) rotate(-2deg);
             z-index: 2;
         }
 
-        h1, h2, h3 {
-            font-family: 'Caveat', cursive;
-            margin-top: 0;
-            color: var(--pastel-purple);
-        }
-
         h1 {
+            font-family: 'Caveat', cursive;
             font-size: 3rem;
             text-align: center;
             margin-bottom: 20px;
+            color: var(--pastel-purple);
             text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--pastel-blue);
-            line-height: 1.2;
-            position: relative;
         }
-        
+
         .cloud-status {
             font-family: 'Nunito', sans-serif;
             font-size: 0.85rem;
-            color: var(--pastel-pink-dark);
-            text-shadow: none;
             display: block;
             margin-top: 5px;
             font-weight: 700;
-        }
-
-        h3 {
-            font-size: 1.8rem;
-            border-bottom: 2px dashed var(--pastel-blue);
-            padding-bottom: 5px;
-            display: inline-block;
-            margin-bottom: 15px;
+            color: #d14949;
         }
 
         /* --- TABS --- */
@@ -115,136 +89,39 @@
             gap: 5px;
             margin-bottom: 20px;
             border-bottom: 2px dashed var(--pastel-blue);
-            padding-bottom: 0;
             overflow-x: auto;
         }
         
         .tab-btn {
-            background-color: #fff;
+            background: #fff;
             border: 2px dashed var(--pastel-blue);
             border-bottom: none;
             border-radius: 10px 10px 0 0;
             padding: 10px 15px;
             cursor: pointer;
-            font-family: 'Nunito', sans-serif;
             font-weight: 700;
             color: var(--pastel-purple);
-            box-shadow: none;
-            width: auto;
-            margin-top: 0;
             opacity: 0.6;
-            transition: all 0.2s;
-            white-space: nowrap;
         }
         
         .tab-btn.active {
-            background-color: var(--pastel-blue);
+            background: var(--pastel-blue);
             color: var(--text-main);
             opacity: 1;
             border-style: solid;
         }
         
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        /* Forms & Sections */
-        .section {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border: 2px dashed var(--pastel-blue);
-            transition: transform 0.2s;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--pastel-purple);
-            font-size: 0.95rem;
-        }
-
-        input, select {
-            font-family: 'Nunito', sans-serif;
-            width: 100%;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border: 2px solid var(--pastel-blue);
-            border-radius: 10px;
-            background-color: #fff;
-            color: var(--text-main);
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--pastel-purple);
-        }
-
-        .form-group {
-            background: rgba(255,255,255,0.4);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px dashed var(--pastel-pink);
-        }
-
-        button {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--pastel-pink);
-            color: var(--text-main);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
-            font-weight: 700;
-            transition: all 0.2s;
-            box-shadow: 0 4px 0px var(--pastel-pink-dark);
-            margin-top: 5px;
-        }
-
-        button:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0px var(--pastel-pink-dark);
-        }
-
-        .btn-green {
-            background-color: var(--pastel-green);
-            box-shadow: 0 4px 0px var(--pastel-green-dark);
-        }
-        .btn-green:active { box-shadow: 0 0px 0px var(--pastel-green-dark); }
-
-        .btn-blue {
-            background-color: var(--pastel-blue);
-            box-shadow: 0 4px 0px var(--pastel-blue-dark);
-        }
-        .btn-blue:active { box-shadow: 0 0px 0px var(--pastel-blue-dark); }
-
-        /* --- CUSTOM CALENDAR STYLING --- */
+        /* Calendar */
         .calendar-container {
             background: #fff;
             border: 2px dashed var(--pastel-purple);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
-
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -252,194 +129,36 @@
             margin-bottom: 15px;
             font-family: 'Caveat', cursive;
             font-size: 1.5rem;
-            color: var(--pastel-purple);
-            font-weight: bold;
         }
-
-        .calendar-header button {
-            width: auto;
-            padding: 5px 15px;
-            margin: 0;
-            font-size: 1.2rem;
-            background: var(--pastel-blue);
-            box-shadow: 0 3px 0px var(--pastel-blue-dark);
-            border-radius: 8px;
-        }
-
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 5px;
             text-align: center;
         }
-
-        .calendar-day-header {
-            font-size: 0.85rem;
-            color: var(--pastel-pink-dark);
-            font-weight: 800;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-
         .calendar-day {
-            padding: 10px 0;
+            padding: 8px 0;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1rem;
             font-weight: 600;
-            color: var(--text-main);
         }
-
-        .calendar-day:hover {
-            background: var(--pastel-pink);
-            color: #fff;
-            transform: scale(1.05);
-        }
-
         .calendar-day.selected {
             background: var(--pastel-purple);
             color: #fff;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-            transform: scale(1.05);
         }
 
-        .calendar-day.empty {
-            cursor: default;
-            background: transparent;
-        }
-        .calendar-day.empty:hover {
-            transform: none;
-            background: transparent;
-        }
+        /* Form styling */
+        .section { background: rgba(255,255,255,0.6); padding: 20px; border-radius: 15px; border: 2px dashed var(--pastel-blue); }
+        input, select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 2px solid var(--pastel-blue); }
+        button { background: var(--pastel-pink); padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; box-shadow: 0 4px 0 var(--pastel-pink-dark); margin-top: 10px;}
+        button:active { transform: translateY(4px); box-shadow: none; }
 
-        /* Invoice Output */
-        pre {
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px dashed var(--pastel-purple);
-            white-space: pre-wrap;
-            font-family: 'Nunito', monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: var(--text-main);
-            margin-top: 15px;
-            display: none;
-        }
-
-        /* Directory Styling */
-        .day-header {
-            font-family: 'Caveat', cursive;
-            font-size: 2.2rem;
-            color: var(--pastel-pink-dark);
-            border-bottom: 3px dashed var(--pastel-pink);
-            margin-top: 20px;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            width: 100%;
-        }
-        
-        .class-header {
-            font-family: 'Nunito', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
-            background: var(--pastel-blue-dark);
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 10px;
-            margin-bottom: 15px;
-        }
-
-        .directory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .student-card {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px dashed var(--pastel-pink-dark);
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            position: relative;
-        }
-        
-        .delete-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ffc2c2;
-            color: #d14949;
-            border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            box-shadow: 0 2px 0px #e69c9c;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-        }
-        .delete-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 0px 0px #e69c9c;
-        }
-
-        .student-card h4 {
-            margin: 0 0 10px 0;
-            color: var(--pastel-purple);
-            font-family: 'Caveat', cursive;
-            font-size: 1.8rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            padding-right: 25px;
-        }
-        .student-card p {
-            margin: 5px 0;
-            line-height: 1.4;
-        }
-        .student-card .icon {
-            display: inline-block;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Custom Notification Toast */
+        /* Notification */
         #toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #fff;
-            color: var(--text-main);
-            text-align: center;
-            border-radius: 15px;
-            padding: 16px;
-            position: fixed;
-            z-index: 10;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 3px solid var(--pastel-pink-dark);
-            box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
-            font-weight: 600;
-            font-family: 'Nunito', sans-serif;
-            opacity: 0;
-            transition: opacity 0.3s, bottom 0.3s;
+            visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #fff; border: 3px solid var(--pastel-pink-dark); padding: 15px; border-radius: 15px; z-index: 100;
         }
-
-        #toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 50px;
-        }
+        #toast.show { visibility: visible; }
     </style>
 </head>
 <body>
@@ -448,593 +167,177 @@
         <div class="tape"></div>
         <h1>
             ✨ Tutor Notes ✨
-            <span id="cloudStatus" class="cloud-status">☁️ Local Mode (Sync Offline)</span>
+            <span id="cloudStatus" class="cloud-status">⚠️ Offline Mode (Check Firebase Keys)</span>
         </h1>
 
-        <!-- TABS -->
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab(event, 'homeTab')">🏠 Home</button>
             <button class="tab-btn" onclick="openTab(event, 'directoryTab')">📋 Directory</button>
             <button class="tab-btn" onclick="openTab(event, 'addTab')">➕ Add Student</button>
-            <button class="tab-btn" onclick="openTab(event, 'invoiceTab')">💌 Invoices</button>
         </div>
 
-        <!-- SECTION 1: HOME (LOG ATTENDANCE) -->
-        <div id="homeTab" class="section tab-content active">
+        <div id="homeTab" class="tab-content active section">
             <h3>📅 Log Attendance</h3>
-            
-            <!-- CUSTOM CALENDAR WIDGET -->
-            <label>1. Select Date of Class</label>
             <div class="calendar-container">
                 <div class="calendar-header">
                     <button onclick="changeMonth(-1)">◀</button>
                     <span id="monthYearDisplay">Month Year</span>
                     <button onclick="changeMonth(1)">▶</button>
                 </div>
-                <div class="calendar-grid" id="calendarGrid">
-                    <!-- Calendar days generated by JS -->
-                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
             </div>
 
-            <div class="form-group">
-                <label>2. Filter by Day of Week</label>
-                <select id="logDayFilter" onchange="updateLogClassDropdown()">
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                </select>
-
-                <label>3. Select Class / Time</label>
-                <select id="logClassFilter" onchange="updateLogStudentDropdown()">
-                    <option disabled selected>Select a day first...</option>
-                </select>
-
-                <label>4. Select Student</label>
-                <select id="attendanceStudent" onchange="checkBillingType()">
-                    <option disabled selected>Select a class first...</option>
-                </select>
-            </div>
-
-            <div id="durationContainer" style="display: none;">
-                <label>Duration (Hours)</label>
-                <input type="number" id="sessionDuration" value="1" step="0.5" min="0.5">
-            </div>
-            
-            <label>Status</label>
-            <select id="classStatus">
-                <option value="Present">Present (Billable) ✅</option>
-                <option value="Leave">On Leave (Not Billable) ☕</option>
-            </select>
-            
-            <button class="btn-green" onclick="logAttendance()">Save Session 🌿</button>
-        </div>
-
-        <!-- SECTION 2: DIRECTORY -->
-        <div id="directoryTab" class="section tab-content">
-            <h3>📋 Organized Directory</h3>
-            <div id="directoryContainer"></div>
-        </div>
-
-        <!-- SECTION 3: ADD STUDENT -->
-        <div id="addTab" class="section tab-content">
-            <h3>📖 Add/Edit Student</h3>
-            
-            <div class="form-group">
-                <label>Student Name</label>
-                <input type="text" id="studentName" placeholder="e.g., Alex Smith">
-                
-                <label>Grade Level</label>
-                <select id="gradeLevel">
-                    <option value="" disabled selected>Select Grade...</option>
-                    <option value="Grade 1">Grade 1</option>
-                    <option value="Grade 2">Grade 2</option>
-                    <option value="Grade 3">Grade 3</option>
-                    <option value="Grade 4">Grade 4</option>
-                    <option value="Grade 5">Grade 5</option>
-                    <option value="Grade 6">Grade 6</option>
-                    <option value="Grade 7">Grade 7</option>
-                    <option value="Grade 8">Grade 8</option>
-                    <option value="Grade 9">Grade 9</option>
-                    <option value="High School">High School</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <label>School</label>
-                <input type="text" id="schoolName" placeholder="e.g., Lincoln Middle School">
-
-                <label>Parent's Phone Number</label>
-                <input type="tel" id="parentPhone" placeholder="e.g., (555) 123-4567">
-
-                <label>Social Media / Contact</label>
-                <input type="text" id="socialMedia" placeholder="e.g., LINE ID, WhatsApp, or Instagram">
-            </div>
-
-            <div class="form-group">
-                <label>Class Name</label>
-                <input type="text" id="className" placeholder="e.g., Algebra 101 or 14:00 Session">
-
-                <label>Day of the Week</label>
-                <select id="dayOfWeek">
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                </select>
-
-                <label>Time Slot (24-Hour)</label>
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <input type="time" id="startTime" style="margin-bottom: 0;">
-                    <span style="align-self: center; color: var(--pastel-purple); font-weight: 600;">to</span>
-                    <input type="time" id="endTime" style="margin-bottom: 0;">
-                </div>
-
-                <label>Billing Method</label>
-                <select id="billingType">
-                    <option value="session">Per Session</option>
-                    <option value="hour">Per Hour</option>
-                </select>
-                
-                <label>Rate ($)</label>
-                <input type="number" id="rate" placeholder="e.g., 50">
-            </div>
-            
-            <button onclick="addStudent()">Save Student 💖</button>
-        </div>
-
-        <!-- SECTION 4: GENERATE INVOICE -->
-        <div id="invoiceTab" class="section tab-content">
-            <h3>💌 Generate Invoice</h3>
             <label>Select Student</label>
-            <select id="invoiceStudent"><option>Add a student first...</option></select>
+            <select id="attendanceStudent"><option>Loading...</option></select>
             
-            <button class="btn-blue" onclick="generateInvoice()">Create Invoice ☁️</button>
-            <pre id="invoiceOutput"></pre>
+            <button onclick="logAttendance()">Save Session 🌿</button>
+        </div>
+
+        <div id="directoryTab" class="tab-content section">
+            <h3>📋 Directory</h3>
+            <div id="directoryContainer">No students added yet.</div>
+        </div>
+
+        <div id="addTab" class="tab-content section">
+            <h3>📖 Add Student</h3>
+            <input type="text" id="studentName" placeholder="Student Name">
+            <select id="dayOfWeek">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+            <input type="number" id="rate" placeholder="Rate ($)">
+            <button onclick="addStudent()">Save Student 💖</button>
         </div>
     </div>
 
-    <!-- Notification Area -->
     <div id="toast">Message here</div>
 
-    <!-- MAIN SCRIPT AREA -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // --- FIREBASE IMPORT ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-        // ==========================================
-        // ☁️ FIREBASE KEYS GO HERE ☁️
-        // 👇 Replace the words in quotes below! 👇
-        // ==========================================
+        // CONFIG (LEAVE BLANK FOR NOW TO TEST IF PAGE LOADS)
         const firebaseConfig = {
-             apiKey: "AIzaSyD4-pFeF0ixzfHdGcv01AhI4nRtp9oTnkM",
-              authDomain: "classroom-tracker-18ab8.firebaseapp.com",
-              projectId: "classroom-tracker-18ab8",
-              storageBucket: "classroom-tracker-18ab8.firebasestorage.app",
-              messagingSenderId: "119632501455",
-              appId: "1:119632501455:web:c23d4d692e948b64a435ba",
-              measurementId: "G-YJ0D0LGB9E"
+            apiKey: "PASTE_HERE",
+            authDomain: "PASTE_HERE",
+            projectId: "PASTE_HERE",
+            storageBucket: "PASTE_HERE",
+            messagingSenderId: "PASTE_HERE",
+            appId: "PASTE_HERE"
         };
-        // ==========================================
-        
-        // --- 2. LOCAL DATA & STATE (Safely Load) ---
-        let students = {};
-        try {
-            const localData = localStorage.getItem('aestheticTutorData');
-            if (localData) students = JSON.parse(localData);
-        } catch(e) {
-            console.log("Starting fresh database.");
-        }
 
-        const daysOfWeekList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        // --- DATA STATE ---
+        let students = JSON.parse(localStorage.getItem('tutorData')) || {};
+        let currentDate = new Date();
+        let selectedDate = new Date();
 
-        // Calendar State Variables
-        let currentDate = new Date(); 
-        let selectedCalendarDate = new Date(); 
-
-        let app, auth, db, appId, currentUser = null;
-
-        // --- 3. CLOUD CONNECTION LOGIC (MASTER DB) ---
-        if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        // --- FIREBASE INIT (SAFE WRAPPER) ---
+        let db;
+        if (firebaseConfig.apiKey !== "PASTE_HERE") {
             try {
-                app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
+                const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
-                appId = 'pastel-tutor-tracker'; 
-
-                signInAnonymously(auth).catch(e => console.log("Auth Issue:", e));
-
-                onAuthStateChanged(auth, (user) => {
-                    currentUser = user;
-                    if (user) {
-                        const cloudStatus = document.getElementById('cloudStatus');
-                        cloudStatus.innerText = '☁️ Cloud Synced (Master Global Sync)';
-                        cloudStatus.style.color = '#b7e4c7'; 
-                        loadFromCloud();
+                document.getElementById('cloudStatus').innerText = "☁️ Cloud Synced";
+                document.getElementById('cloudStatus').style.color = "#b7e4c7";
+                
+                onSnapshot(doc(db, 'tutor', 'master'), (snap) => {
+                    if (snap.exists()) {
+                        students = snap.data().students;
+                        updateUI();
                     }
                 });
-            } catch(e) {
-                console.error("Firebase setup error:", e);
-            }
+            } catch (e) { console.error("Firebase Error", e); }
         }
 
-        function loadFromCloud() {
-            if (!db) return;
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tutorData', 'master');
-            
-            onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    students = docSnap.data().students || {};
-                    localStorage.setItem('aestheticTutorData', JSON.stringify(students)); 
-                    
-                    window.updateLogClassDropdown();
-                    window.updateInvoiceDropdown();
-                    if (document.getElementById('directoryTab').classList.contains('active')) {
-                        window.renderDirectory();
-                    }
-                }
-            }, (error) => {
-                console.error("Cloud Error:", error);
-            });
-        }
-
-        window.saveData = async function() {
-            localStorage.setItem('aestheticTutorData', JSON.stringify(students));
-            if (currentUser && db) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tutorData', 'master');
-                    await setDoc(docRef, { students: students });
-                } catch(e) {
-                    console.error("Could not reach cloud:", e);
-                }
-            }
-        }
-
-        // --- 4. CALENDAR LOGIC ---
-        window.renderCalendar = function() {
-            const monthYearDisplay = document.getElementById('monthYearDisplay');
-            const calendarGrid = document.getElementById('calendarGrid');
-            
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            monthYearDisplay.innerText = `${monthNames[month]} ${year}`;
-            
-            calendarGrid.innerHTML = '';
-            
-            const daysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            daysShort.forEach(day => {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day-header';
-                dayEl.innerText = day;
-                calendarGrid.appendChild(dayEl);
-            });
-            
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            for (let i = 0; i < firstDay; i++) {
-                const blank = document.createElement('div');
-                blank.className = 'calendar-day empty';
-                calendarGrid.appendChild(blank);
-            }
-            
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day';
-                dayEl.innerText = i;
-                
-                const isSelected = 
-                    selectedCalendarDate.getDate() === i &&
-                    selectedCalendarDate.getMonth() === month &&
-                    selectedCalendarDate.getFullYear() === year;
-
-                if (isSelected) dayEl.classList.add('selected');
-                
-                dayEl.onclick = () => {
-                    selectedCalendarDate = new Date(year, month, i);
-                    window.renderCalendar();
-                    
-                    const dayOfWeekNum = selectedCalendarDate.getDay(); 
-                    const jsDaysToDropdownDays = [6, 0, 1, 2, 3, 4, 5]; 
-                    document.getElementById('logDayFilter').selectedIndex = jsDaysToDropdownDays[dayOfWeekNum];
-                    window.updateLogClassDropdown();
-                };
-                
-                calendarGrid.appendChild(dayEl);
-            }
-        }
-
-        window.changeMonth = function(direction) {
-            currentDate.setMonth(currentDate.getMonth() + direction);
-            window.renderCalendar();
-        }
-
-        // --- 5. GLOBAL UI FUNCTIONS ---
-        window.showMessage = function(msg, colorHex) {
-            const toast = document.getElementById("toast");
-            toast.innerText = msg;
-            toast.style.borderColor = colorHex || "#ffafcc";
-            toast.className = "show";
-            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-        }
-
-        window.openTab = function(evt, tabId) {
-            const tabContents = document.getElementsByClassName("tab-content");
-            for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active"); 
-            
-            const tabBtns = document.getElementsByClassName("tab-btn");
-            for (let i = 0; i < tabBtns.length; i++) tabBtns[i].classList.remove("active"); 
-            
-            document.getElementById(tabId).classList.add("active");
-            evt.currentTarget.classList.add("active");
-
-            if (tabId === 'directoryTab') window.renderDirectory(); 
-            else if (tabId === 'homeTab') window.updateLogClassDropdown(); 
-        }
-
-        window.updateLogClassDropdown = function() {
-            const selectedDay = document.getElementById('logDayFilter').value;
-            const classSelect = document.getElementById('logClassFilter');
-            const studentSelect = document.getElementById('attendanceStudent');
-            
-            let classesOnDay = new Set();
-            for (let name in students) {
-                if (students[name].day === selectedDay) classesOnDay.add(students[name].className || "General");
-            }
-
-            classSelect.innerHTML = ''; 
-            if (classesOnDay.size === 0) {
-                classSelect.innerHTML = '<option disabled selected>No classes scheduled this day</option>';
-                studentSelect.innerHTML = '<option disabled selected>No students available</option>';
-            } else {
-                classSelect.innerHTML = '<option disabled selected>Select a class...</option>';
-                classesOnDay.forEach(cls => { classSelect.innerHTML += `<option value="${cls}">${cls}</option>`; });
-                studentSelect.innerHTML = '<option disabled selected>Select a class first...</option>';
-            }
-            window.checkBillingType();
-        }
-
-        window.updateLogStudentDropdown = function() {
-            const selectedDay = document.getElementById('logDayFilter').value;
-            const selectedClass = document.getElementById('logClassFilter').value;
-            const studentSelect = document.getElementById('attendanceStudent');
-            
-            studentSelect.innerHTML = '<option disabled selected>Select a student...</option>';
-            
-            let foundStudents = false;
-            for (let name in students) {
-                const sClass = students[name].className || "General";
-                if (students[name].day === selectedDay && sClass === selectedClass) {
-                    studentSelect.innerHTML += `<option value="${name}">${name}</option>`;
-                    foundStudents = true;
-                }
-            }
-
-            if (!foundStudents) studentSelect.innerHTML = '<option disabled selected>No students in this class</option>'; 
-            window.checkBillingType();
-        }
-
-        window.updateInvoiceDropdown = function() {
-            const invoiceSelect = document.getElementById('invoiceStudent');
-            const studentNames = Object.keys(students);
-            
-            if (studentNames.length === 0) {
-                invoiceSelect.innerHTML = '<option disabled selected>Add a student first...</option>';
-            } else {
-                invoiceSelect.innerHTML = '<option value="" disabled selected>Select a student to invoice...</option>';
-                studentNames.forEach(name => { invoiceSelect.innerHTML += `<option value="${name}">${name}</option>`; });
-            }
-        }
-
-        window.checkBillingType = function() {
-            const name = document.getElementById('attendanceStudent').value;
-            const container = document.getElementById('durationContainer');
-            if (students[name] && students[name].billing === 'hour') container.style.display = 'block';
-            else container.style.display = 'none';
-        }
-
-        window.addStudent = function() {
-            const name = document.getElementById('studentName').value.trim();
-            const gradeLevel = document.getElementById('gradeLevel').value;
-            const schoolName = document.getElementById('schoolName').value.trim();
-            const parentPhone = document.getElementById('parentPhone').value.trim();
-            const socialMedia = document.getElementById('socialMedia').value.trim();
-            
-            let className = document.getElementById('className').value.trim();
-            if(!className) className = "General";
-
-            const day = document.getElementById('dayOfWeek').value;
-            const startTime = document.getElementById('startTime').value;
-            const endTime = document.getElementById('endTime').value;
-            const time = (startTime && endTime) ? `${startTime} - ${endTime}` : '';
-            const billing = document.getElementById('billingType').value;
-            const rate = parseFloat(document.getElementById('rate').value);
-            
-            if (name && rate) {
-                if(!students[name]) students[name] = { sessions: [] }; 
-                
-                students[name].grade = gradeLevel;
-                students[name].school = schoolName;
-                students[name].phone = parentPhone;
-                students[name].social = socialMedia;
-                students[name].className = className;
-                students[name].day = day;
-                students[name].time = time;
-                students[name].billing = billing;
-                students[name].rate = rate; 
-                
-                window.saveData(); 
-                window.showMessage(`Successfully saved ${name}! ✨`, "#ffafcc");
-                
-                document.getElementById('studentName').value = '';
-                document.getElementById('schoolName').value = '';
-                document.getElementById('parentPhone').value = '';
-                document.getElementById('socialMedia').value = '';
-                document.getElementById('gradeLevel').selectedIndex = 0;
-                
-                window.updateLogClassDropdown();
-                window.updateInvoiceDropdown();
-            } else {
-                window.showMessage("Please enter both a name and a rate! 🎀", "#ffafcc");
-            }
-        }
-
-        window.logAttendance = function() {
-            const name = document.getElementById('attendanceStudent').value;
-            const status = document.getElementById('classStatus').value;
-            const duration = parseFloat(document.getElementById('sessionDuration').value) || 1;
-            
-            const y = selectedCalendarDate.getFullYear();
-            const m = String(selectedCalendarDate.getMonth() + 1).padStart(2, '0');
-            const d = String(selectedCalendarDate.getDate()).padStart(2, '0');
-            const dateStr = `${y}-${m}-${d}`;
-
-            if (name && name !== "Select a student..." && name !== "Select a class first..." && students[name]) {
-                students[name].sessions.push({ date: dateStr, status, duration });
-                window.saveData(); 
-                window.showMessage(`Logged ${status} for ${name} on ${dateStr}! 🌸`, "#b7e4c7");
-                document.getElementById('attendanceStudent').value = "Select a student...";
-            } else {
-                window.showMessage("Please select a student and ensure a date is highlighted! 🌷", "#ffafcc");
-            }
-        }
-
-        window.deleteStudent = function(name) {
-            if (confirm(`Are you sure you want to completely remove ${name} from your directory?`)) {
-                delete students[name];
-                window.saveData();
-                window.renderDirectory();
-                window.updateLogClassDropdown();
-                window.updateInvoiceDropdown();
-                window.showMessage(`Removed ${name}. 🗑️`, "#ffc8dd");
-            }
-        }
-
-        window.renderDirectory = function() {
-            const container = document.getElementById('directoryContainer');
-            container.innerHTML = ''; 
-            
-            const studentNames = Object.keys(students);
-            if (studentNames.length === 0) {
-                container.innerHTML = '<p style="color: var(--text-main); font-style: italic;">No students yet! Head over to the Add Student tab to get started. 🎀</p>';
-                return;
-            }
-
-            daysOfWeekList.forEach(day => {
-                const dayStudents = studentNames.filter(name => students[name].day === day);
-                
-                if (dayStudents.length > 0) {
-                    const dayHeader = document.createElement('div');
-                    dayHeader.className = 'day-header';
-                    dayHeader.innerText = `📅 ${day}`;
-                    container.appendChild(dayHeader);
-
-                    const classGroups = {};
-                    dayStudents.forEach(name => {
-                        const cName = students[name].className || "General";
-                        if (!classGroups[cName]) classGroups[cName] = [];
-                        classGroups[cName].push(name);
-                    });
-
-                    for (let cName in classGroups) {
-                        const classHeader = document.createElement('div');
-                        classHeader.className = 'class-header';
-                        classHeader.innerHTML = `🏫 Class: ${cName}`;
-                        container.appendChild(classHeader);
-
-                        const grid = document.createElement('div');
-                        grid.className = 'directory-grid';
-
-                        classGroups[cName].forEach(name => {
-                            const s = students[name];
-                            const card = document.createElement('div');
-                            card.className = 'student-card';
-                            card.innerHTML = `
-                                <button class="delete-btn" onclick="window.deleteStudent('${name}')" title="Delete Student">✖</button>
-                                <h4>${name}</h4>
-                                <p><span class="icon">🎓</span> <strong>Grade:</strong> ${s.grade || 'N/A'}</p>
-                                <p><span class="icon">🏫</span> <strong>School:</strong> ${s.school || 'N/A'}</p>
-                                <p><span class="icon">📞</span> <strong>Parent:</strong> ${s.phone || 'N/A'}</p>
-                                <p><span class="icon">💬</span> <strong>Contact:</strong> ${s.social || 'N/A'}</p>
-                                <hr style="border: 0; border-top: 1px dashed var(--pastel-pink); margin: 10px 0;">
-                                <p><span class="icon">⏰</span> <strong>Time:</strong> ${s.time || 'N/A'}</p>
-                                <p><span class="icon">💰</span> <strong>Rate:</strong> $${s.rate} / ${s.billing === 'hour' ? 'hr' : 'session'}</p>
-                                <p><span class="icon">📝</span> <strong>Logs:</strong> ${s.sessions ? s.sessions.length : 0}</p>
-                            `;
-                            grid.appendChild(card);
-                        });
-                        container.appendChild(grid);
-                    }
-                }
-            });
-        }
-
-        window.generateInvoice = function() {
-            const name = document.getElementById('invoiceStudent').value;
-            if (!name || !students[name]) {
-                window.showMessage("Please select a valid student to invoice! 🎀", "#a2d2ff");
-                return;
-            }
-            
-            const student = students[name];
-            const presentDays = student.sessions.filter(s => s.status === 'Present');
-            const leaveDays = student.sessions.filter(s => s.status === 'Leave');
-            
-            let total = 0;
-            let hoursBilled = 0;
-
-            if (student.billing === 'hour') {
-                presentDays.forEach(s => {
-                    total += s.duration * student.rate;
-                    hoursBilled += s.duration;
-                });
-            } else {
-                total = presentDays.length * student.rate;
-            }
-            
-            let output = `✧･ﾟ: *✧･ﾟ:* INVOICE *:･ﾟ✧*:･ﾟ✧\n\n`;
-            output += `Student:        ${name.toUpperCase()}\n`;
-            output += `Class:          ${student.className || 'General'}\n`;
-            output += `Schedule:       ${student.day || 'N/A'}s, ${student.time || 'N/A'}\n`;
-            
-            if (student.billing === 'hour') output += `Hourly Rate:    $${student.rate}/hr\n`; 
-            else output += `Session Rate:   $${student.rate}/session\n`; 
-            
-            output += `--------------------------------\n`;
-            output += `Total Classes Logged: ${student.sessions.length}\n`;
-            output += `Classes Attended:     ${presentDays.length} ✅\n`;
-            output += `Classes on Leave:     ${leaveDays.length} ☕\n`;
-            
-            if (student.billing === 'hour' && presentDays.length > 0) output += `Total Hours Taught:   ${hoursBilled} hrs\n`; 
-            
-            output += `--------------------------------\n`;
-            output += `TOTAL AMOUNT DUE:     $${total}\n\n`;
-            output += `Thank you for learning with me! 💕`;
-            
-            const outputEl = document.getElementById('invoiceOutput');
-            outputEl.innerText = output;
-            outputEl.style.display = 'block'; 
-            window.showMessage("Invoice generated! ☁️", "#a2d2ff");
-        }
-
-        window.onload = function() {
-            window.renderCalendar();
-
-            const todayIndex = new Date().getDay();
-            const jsDaysToDropdownDays = [6, 0, 1, 2, 3, 4, 5]; 
-            document.getElementById('logDayFilter').selectedIndex = jsDaysToDropdownDays[todayIndex];
-
-            window.updateLogClassDropdown();
-            window.updateInvoiceDropdown();
+        // --- UI LOGIC ---
+        window.openTab = (e, id) => {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            e.currentTarget.classList.add('active');
+            if(id === 'directoryTab') renderDirectory();
         };
+
+        window.renderCalendar = () => {
+            const grid = document.getElementById('calendarGrid');
+            const display = document.getElementById('monthYearDisplay');
+            grid.innerHTML = '';
+            const y = currentDate.getFullYear(), m = currentDate.getMonth();
+            display.innerText = `${new Intl.DateTimeFormat('en-US', {month:'long'}).format(currentDate)} ${y}`;
+            
+            const firstDay = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m+1, 0).getDate();
+
+            for(let i=0; i<firstDay; i++) grid.innerHTML += '<div></div>';
+            for(let i=1; i<=daysInMonth; i++) {
+                const isSel = selectedDate.getDate() === i && selectedDate.getMonth() === m;
+                grid.innerHTML += `<div class="calendar-day ${isSel?'selected':''}" onclick="selectDate(${i})">${i}</div>`;
+            }
+        };
+
+        window.selectDate = (day) => {
+            selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+            renderCalendar();
+        };
+
+        window.changeMonth = (dir) => {
+            currentDate.setMonth(currentDate.getMonth() + dir);
+            renderCalendar();
+        };
+
+        window.addStudent = async () => {
+            const name = document.getElementById('studentName').value;
+            const day = document.getElementById('dayOfWeek').value;
+            const rate = document.getElementById('rate').value;
+            if(!name) return;
+            students[name] = { day, rate, sessions: [] };
+            save();
+            showMsg("Student Added!");
+        };
+
+        window.logAttendance = () => {
+            const name = document.getElementById('attendanceStudent').value;
+            if(!students[name]) return;
+            students[name].sessions.push(selectedDate.toDateString());
+            save();
+            showMsg("Logged!");
+        };
+
+        function updateUI() {
+            const sel = document.getElementById('attendanceStudent');
+            sel.innerHTML = Object.keys(students).map(s => `<option value="${s}">${s}</option>`).join('');
+        }
+
+        function renderDirectory() {
+            const cont = document.getElementById('directoryContainer');
+            cont.innerHTML = Object.keys(students).map(name => `
+                <div style="background:#fff; padding:10px; margin-bottom:5px; border-radius:10px;">
+                    <strong>${name}</strong> (${students[name].day}) - $${students[name].rate}
+                </div>
+            `).join('') || "No students.";
+        }
+
+        async function save() {
+            localStorage.setItem('tutorData', JSON.stringify(students));
+            updateUI();
+            if(db) await setDoc(doc(db, 'tutor', 'master'), { students });
+        }
+
+        function showMsg(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m; t.className = "show";
+            setTimeout(() => t.className = "", 2000);
+        }
+
+        // Init
+        renderCalendar();
+        updateUI();
     </script>
 </body>
 </html>
