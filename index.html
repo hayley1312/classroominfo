@@ -1,13 +1,619 @@
-<!-- MAIN SCRIPT AREA -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Tutor Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fce4ec; 
+            --paper-color: #fffaf0; 
+            --line-color: #e1e8ed; 
+            --margin-line: #ffadad; 
+            --text-main: #5c4d4d; 
+            
+            /* Pastel Accents */
+            --pastel-pink: #ffc8dd;
+            --pastel-pink-dark: #ffafcc;
+            --pastel-blue: #bde0fe;
+            --pastel-blue-dark: #a2d2ff;
+            --pastel-purple: #cdb4db;
+            --pastel-green: #d8f3dc;
+            --pastel-green-dark: #b7e4c7;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(var(--pastel-pink) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* The Notebook Container */
+        .notebook {
+            background-color: var(--paper-color);
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 100% 2em;
+            border-left: 2px solid var(--margin-line);
+            border-radius: 5px 20px 20px 5px;
+            box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 2.5em 3em 3em 4em;
+            max-width: 650px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Binder holes */
+        .notebook::before {
+            content: '';
+            position: absolute;
+            top: 0; 
+            bottom: 0; 
+            left: 15px;
+            width: 20px;
+            background-image: radial-gradient(circle, var(--bg-color) 6px, transparent 7px);
+            background-size: 100% 4em;
+            background-repeat: repeat-y;
+        }
+
+        /* Cute tape decoration */
+        .tape {
+            background-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            width: 100px;
+            height: 30px;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            z-index: 2;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Caveat', cursive;
+            margin-top: 0;
+            color: var(--pastel-purple);
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--pastel-blue);
+            line-height: 1.2;
+            position: relative;
+        }
+        
+        .cloud-status {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            color: var(--pastel-pink-dark);
+            text-shadow: none;
+            display: block;
+            margin-top: 5px;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            border-bottom: 2px dashed var(--pastel-blue);
+            padding-bottom: 5px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* --- TABS --- */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--pastel-blue);
+            padding-bottom: 0;
+            overflow-x: auto;
+        }
+        
+        .tab-btn {
+            background-color: #fff;
+            border: 2px dashed var(--pastel-blue);
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            color: var(--pastel-purple);
+            box-shadow: none;
+            width: auto;
+            margin-top: 0;
+            opacity: 0.6;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .tab-btn.active {
+            background-color: var(--pastel-blue);
+            color: var(--text-main);
+            opacity: 1;
+            border-style: solid;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Forms & Sections */
+        .section {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px dashed var(--pastel-blue);
+            transition: transform 0.2s;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--pastel-purple);
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            font-family: 'Nunito', sans-serif;
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border: 2px solid var(--pastel-blue);
+            border-radius: 10px;
+            background-color: #fff;
+            color: var(--text-main);
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--pastel-purple);
+        }
+
+        .form-group {
+            background: rgba(255,255,255,0.4);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px dashed var(--pastel-pink);
+        }
+
+        button {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--pastel-pink);
+            color: var(--text-main);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0px var(--pastel-pink-dark);
+            margin-top: 5px;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0px var(--pastel-pink-dark);
+        }
+
+        .btn-green {
+            background-color: var(--pastel-green);
+            box-shadow: 0 4px 0px var(--pastel-green-dark);
+        }
+        .btn-green:active { box-shadow: 0 0px 0px var(--pastel-green-dark); }
+
+        .btn-blue {
+            background-color: var(--pastel-blue);
+            box-shadow: 0 4px 0px var(--pastel-blue-dark);
+        }
+        .btn-blue:active { box-shadow: 0 0px 0px var(--pastel-blue-dark); }
+
+        /* --- CUSTOM CALENDAR STYLING --- */
+        .calendar-container {
+            background: #fff;
+            border: 2px dashed var(--pastel-purple);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: var(--pastel-purple);
+            font-weight: bold;
+        }
+
+        .calendar-header button {
+            width: auto;
+            padding: 5px 15px;
+            margin: 0;
+            font-size: 1.2rem;
+            background: var(--pastel-blue);
+            box-shadow: 0 3px 0px var(--pastel-blue-dark);
+            border-radius: 8px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .calendar-day-header {
+            font-size: 0.85rem;
+            color: var(--pastel-pink-dark);
+            font-weight: 800;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .calendar-day {
+            padding: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .calendar-day:hover {
+            background: var(--pastel-pink);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .calendar-day.selected {
+            background: var(--pastel-purple);
+            color: #fff;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transform: scale(1.05);
+        }
+
+        .calendar-day.empty {
+            cursor: default;
+            background: transparent;
+        }
+        .calendar-day.empty:hover {
+            transform: none;
+            background: transparent;
+        }
+
+        /* Invoice Output */
+        pre {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px dashed var(--pastel-purple);
+            white-space: pre-wrap;
+            font-family: 'Nunito', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* Directory Styling */
+        .day-header {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2rem;
+            color: var(--pastel-pink-dark);
+            border-bottom: 3px dashed var(--pastel-pink);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            width: 100%;
+        }
+        
+        .class-header {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--pastel-blue-dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .student-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px dashed var(--pastel-pink-dark);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffc2c2;
+            color: #d14949;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 2px 0px #e69c9c;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .delete-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 0px 0px #e69c9c;
+        }
+
+        .student-card h4 {
+            margin: 0 0 10px 0;
+            color: var(--pastel-purple);
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            padding-right: 25px;
+        }
+        .student-card p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+        .student-card .icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Custom Notification Toast */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #fff;
+            color: var(--text-main);
+            text-align: center;
+            border-radius: 15px;
+            padding: 16px;
+            position: fixed;
+            z-index: 10;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 3px solid var(--pastel-pink-dark);
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+            font-weight: 600;
+            font-family: 'Nunito', sans-serif;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="notebook">
+        <div class="tape"></div>
+        <h1>
+            ✨ Tutor Notes ✨
+            <span id="cloudStatus" class="cloud-status">☁️ Local Mode (Sync Offline)</span>
+        </h1>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'homeTab')">🏠 Home</button>
+            <button class="tab-btn" onclick="openTab(event, 'directoryTab')">📋 Directory</button>
+            <button class="tab-btn" onclick="openTab(event, 'addTab')">➕ Add Student</button>
+            <button class="tab-btn" onclick="openTab(event, 'invoiceTab')">💌 Invoices</button>
+        </div>
+
+        <!-- SECTION 1: HOME (LOG ATTENDANCE) -->
+        <div id="homeTab" class="section tab-content active">
+            <h3>📅 Log Attendance</h3>
+            
+            <!-- CUSTOM CALENDAR WIDGET -->
+            <label>1. Select Date of Class</label>
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button onclick="changeMonth(-1)">◀</button>
+                    <span id="monthYearDisplay">Month Year</span>
+                    <button onclick="changeMonth(1)">▶</button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar days generated by JS -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>2. Filter by Day of Week</label>
+                <select id="logDayFilter" onchange="updateLogClassDropdown()">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+
+                <label>3. Select Class / Time</label>
+                <select id="logClassFilter" onchange="updateLogStudentDropdown()">
+                    <option disabled selected>Select a day first...</option>
+                </select>
+
+                <label>4. Select Student</label>
+                <select id="attendanceStudent" onchange="checkBillingType()">
+                    <option disabled selected>Select a class first...</option>
+                </select>
+            </div>
+
+            <div id="durationContainer" style="display: none;">
+                <label>Duration (Hours)</label>
+                <input type="number" id="sessionDuration" value="1" step="0.5" min="0.5">
+            </div>
+            
+            <label>Status</label>
+            <select id="classStatus">
+                <option value="Present">Present (Billable) ✅</option>
+                <option value="Leave">On Leave (Not Billable) ☕</option>
+            </select>
+            
+            <button class="btn-green" onclick="logAttendance()">Save Session 🌿</button>
+        </div>
+
+        <!-- SECTION 2: DIRECTORY -->
+        <div id="directoryTab" class="section tab-content">
+            <h3>📋 Organized Directory</h3>
+            <div id="directoryContainer"></div>
+        </div>
+
+        <!-- SECTION 3: ADD STUDENT -->
+        <div id="addTab" class="section tab-content">
+            <h3>📖 Add/Edit Student</h3>
+            
+            <div class="form-group">
+                <label>Student Name</label>
+                <input type="text" id="studentName" placeholder="e.g., Alex Smith">
+                
+                <label>Grade Level</label>
+                <select id="gradeLevel">
+                    <option value="" disabled selected>Select Grade...</option>
+                    <option value="Grade 1">Grade 1</option>
+                    <option value="Grade 2">Grade 2</option>
+                    <option value="Grade 3">Grade 3</option>
+                    <option value="Grade 4">Grade 4</option>
+                    <option value="Grade 5">Grade 5</option>
+                    <option value="Grade 6">Grade 6</option>
+                    <option value="Grade 7">Grade 7</option>
+                    <option value="Grade 8">Grade 8</option>
+                    <option value="Grade 9">Grade 9</option>
+                    <option value="High School">High School</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label>School</label>
+                <input type="text" id="schoolName" placeholder="e.g., Lincoln Middle School">
+
+                <label>Parent's Phone Number</label>
+                <input type="tel" id="parentPhone" placeholder="e.g., (555) 123-4567">
+
+                <label>Social Media / Contact</label>
+                <input type="text" id="socialMedia" placeholder="e.g., LINE ID, WhatsApp, or Instagram">
+            </div>
+
+            <div class="form-group">
+                <label>Class Name</label>
+                <input type="text" id="className" placeholder="e.g., Algebra 101 or 14:00 Session">
+
+                <label>Day of the Week</label>
+                <select id="dayOfWeek">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+
+                <label>Time Slot (24-Hour)</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="time" id="startTime" style="margin-bottom: 0;">
+                    <span style="align-self: center; color: var(--pastel-purple); font-weight: 600;">to</span>
+                    <input type="time" id="endTime" style="margin-bottom: 0;">
+                </div>
+
+                <label>Billing Method</label>
+                <select id="billingType">
+                    <option value="session">Per Session</option>
+                    <option value="hour">Per Hour</option>
+                </select>
+                
+                <label>Rate ($)</label>
+                <input type="number" id="rate" placeholder="e.g., 50">
+            </div>
+            
+            <button onclick="addStudent()">Save Student 💖</button>
+        </div>
+
+        <!-- SECTION 4: GENERATE INVOICE -->
+        <div id="invoiceTab" class="section tab-content">
+            <h3>💌 Generate Invoice</h3>
+            <label>Select Student</label>
+            <select id="invoiceStudent"><option>Add a student first...</option></select>
+            
+            <button class="btn-blue" onclick="generateInvoice()">Create Invoice ☁️</button>
+            <pre id="invoiceOutput"></pre>
+        </div>
+    </div>
+
+    <!-- Notification Area -->
+    <div id="toast">Message here</div>
+
+    <!-- MAIN SCRIPT AREA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- 1. CLOUD CONFIGURATION ---
-        // 👇 TUTOR NOTE: PASTE YOUR FIREBASE KEYS BELOW THIS LINE 👇
+        // ==========================================
+        // ☁️ FIREBASE KEYS GO HERE ☁️
+        // 👇 Replace the words in quotes below! 👇
+        // ==========================================
         const firebaseConfig = {
-            apiKey: "AIzaSyD4-pFeF0ixzfHdGcv01AhI4nRtp9oTnkM",
+             apiKey: "AIzaSyD4-pFeF0ixzfHdGcv01AhI4nRtp9oTnkM",
               authDomain: "classroom-tracker-18ab8.firebaseapp.com",
               projectId: "classroom-tracker-18ab8",
               storageBucket: "classroom-tracker-18ab8.firebasestorage.app",
@@ -15,30 +621,40 @@
               appId: "1:119632501455:web:c23d4d692e948b64a435ba",
               measurementId: "G-YJ0D0LGB9E"
         };
-        // 👆 PASTE ABOVE THIS LINE 👆
+        // ==========================================
         
-        // --- 2. LOCAL DATA FALLBACK ---
-        let students = JSON.parse(localStorage.getItem('aestheticTutorData')) || {};
-        const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        // --- 2. LOCAL DATA & STATE (Safely Load) ---
+        let students = {};
+        try {
+            const localData = localStorage.getItem('aestheticTutorData');
+            if (localData) students = JSON.parse(localData);
+        } catch(e) {
+            console.log("Starting fresh database.");
+        }
+
+        const daysOfWeekList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+        // Calendar State Variables
+        let currentDate = new Date(); 
+        let selectedCalendarDate = new Date(); 
 
         let app, auth, db, appId, currentUser = null;
 
-        // --- 3. CLOUD CONNECTION LOGIC ---
+        // --- 3. CLOUD CONNECTION LOGIC (MASTER DB) ---
         if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
             try {
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
-                appId = 'pastel-tutor-tracker'; // Master App ID
+                appId = 'pastel-tutor-tracker'; 
 
-                // Login invisibly just to get database access
                 signInAnonymously(auth).catch(e => console.log("Auth Issue:", e));
 
                 onAuthStateChanged(auth, (user) => {
                     currentUser = user;
                     if (user) {
                         const cloudStatus = document.getElementById('cloudStatus');
-                        cloudStatus.innerText = '☁️ Cloud Synced (Master Mode)';
+                        cloudStatus.innerText = '☁️ Cloud Synced (Master Global Sync)';
                         cloudStatus.style.color = '#b7e4c7'; 
                         loadFromCloud();
                     }
@@ -48,10 +664,9 @@
             }
         }
 
-        // 👇 THIS IS THE FIX: Reading from the MASTER public folder 👇
         function loadFromCloud() {
             if (!db) return;
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tutorApp', 'masterDatabase');
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tutorData', 'master');
             
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
@@ -69,14 +684,11 @@
             });
         }
 
-        // --- 4. GLOBAL FUNCTIONS ---
         window.saveData = async function() {
             localStorage.setItem('aestheticTutorData', JSON.stringify(students));
-
-            // 👇 THIS IS THE FIX: Saving to the MASTER public folder 👇
             if (currentUser && db) {
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tutorApp', 'masterDatabase');
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tutorData', 'master');
                     await setDoc(docRef, { students: students });
                 } catch(e) {
                     console.error("Could not reach cloud:", e);
@@ -84,6 +696,68 @@
             }
         }
 
+        // --- 4. CALENDAR LOGIC ---
+        window.renderCalendar = function() {
+            const monthYearDisplay = document.getElementById('monthYearDisplay');
+            const calendarGrid = document.getElementById('calendarGrid');
+            
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            monthYearDisplay.innerText = `${monthNames[month]} ${year}`;
+            
+            calendarGrid.innerHTML = '';
+            
+            const daysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            daysShort.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day-header';
+                dayEl.innerText = day;
+                calendarGrid.appendChild(dayEl);
+            });
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            for (let i = 0; i < firstDay; i++) {
+                const blank = document.createElement('div');
+                blank.className = 'calendar-day empty';
+                calendarGrid.appendChild(blank);
+            }
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.innerText = i;
+                
+                const isSelected = 
+                    selectedCalendarDate.getDate() === i &&
+                    selectedCalendarDate.getMonth() === month &&
+                    selectedCalendarDate.getFullYear() === year;
+
+                if (isSelected) dayEl.classList.add('selected');
+                
+                dayEl.onclick = () => {
+                    selectedCalendarDate = new Date(year, month, i);
+                    window.renderCalendar();
+                    
+                    const dayOfWeekNum = selectedCalendarDate.getDay(); 
+                    const jsDaysToDropdownDays = [6, 0, 1, 2, 3, 4, 5]; 
+                    document.getElementById('logDayFilter').selectedIndex = jsDaysToDropdownDays[dayOfWeekNum];
+                    window.updateLogClassDropdown();
+                };
+                
+                calendarGrid.appendChild(dayEl);
+            }
+        }
+
+        window.changeMonth = function(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            window.renderCalendar();
+        }
+
+        // --- 5. GLOBAL UI FUNCTIONS ---
         window.showMessage = function(msg, colorHex) {
             const toast = document.getElementById("toast");
             toast.innerText = msg;
@@ -94,18 +768,16 @@
 
         window.openTab = function(evt, tabId) {
             const tabContents = document.getElementsByClassName("tab-content");
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove("active");
-            }
+            for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active"); 
+            
             const tabBtns = document.getElementsByClassName("tab-btn");
-            for (let i = 0; i < tabBtns.length; i++) {
-                tabBtns[i].classList.remove("active");
-            }
+            for (let i = 0; i < tabBtns.length; i++) tabBtns[i].classList.remove("active"); 
+            
             document.getElementById(tabId).classList.add("active");
             evt.currentTarget.classList.add("active");
 
-            if (tabId === 'directoryTab') { window.renderDirectory(); } 
-            else if (tabId === 'homeTab') { window.updateLogClassDropdown(); }
+            if (tabId === 'directoryTab') window.renderDirectory(); 
+            else if (tabId === 'homeTab') window.updateLogClassDropdown(); 
         }
 
         window.updateLogClassDropdown = function() {
@@ -115,9 +787,7 @@
             
             let classesOnDay = new Set();
             for (let name in students) {
-                if (students[name].day === selectedDay) {
-                    classesOnDay.add(students[name].className || "General");
-                }
+                if (students[name].day === selectedDay) classesOnDay.add(students[name].className || "General");
             }
 
             classSelect.innerHTML = ''; 
@@ -126,9 +796,7 @@
                 studentSelect.innerHTML = '<option disabled selected>No students available</option>';
             } else {
                 classSelect.innerHTML = '<option disabled selected>Select a class...</option>';
-                classesOnDay.forEach(cls => {
-                    classSelect.innerHTML += `<option value="${cls}">${cls}</option>`;
-                });
+                classesOnDay.forEach(cls => { classSelect.innerHTML += `<option value="${cls}">${cls}</option>`; });
                 studentSelect.innerHTML = '<option disabled selected>Select a class first...</option>';
             }
             window.checkBillingType();
@@ -150,7 +818,7 @@
                 }
             }
 
-            if (!foundStudents) { studentSelect.innerHTML = '<option disabled selected>No students in this class</option>'; }
+            if (!foundStudents) studentSelect.innerHTML = '<option disabled selected>No students in this class</option>'; 
             window.checkBillingType();
         }
 
@@ -162,20 +830,15 @@
                 invoiceSelect.innerHTML = '<option disabled selected>Add a student first...</option>';
             } else {
                 invoiceSelect.innerHTML = '<option value="" disabled selected>Select a student to invoice...</option>';
-                studentNames.forEach(name => {
-                    invoiceSelect.innerHTML += `<option value="${name}">${name}</option>`;
-                });
+                studentNames.forEach(name => { invoiceSelect.innerHTML += `<option value="${name}">${name}</option>`; });
             }
         }
 
         window.checkBillingType = function() {
             const name = document.getElementById('attendanceStudent').value;
             const container = document.getElementById('durationContainer');
-            if (students[name] && students[name].billing === 'hour') {
-                container.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-            }
+            if (students[name] && students[name].billing === 'hour') container.style.display = 'block';
+            else container.style.display = 'none';
         }
 
         window.addStudent = function() {
@@ -196,7 +859,7 @@
             const rate = parseFloat(document.getElementById('rate').value);
             
             if (name && rate) {
-                if(!students[name]) { students[name] = { sessions: [] }; }
+                if(!students[name]) students[name] = { sessions: [] }; 
                 
                 students[name].grade = gradeLevel;
                 students[name].school = schoolName;
@@ -226,17 +889,21 @@
 
         window.logAttendance = function() {
             const name = document.getElementById('attendanceStudent').value;
-            const date = document.getElementById('classDate').value;
             const status = document.getElementById('classStatus').value;
             const duration = parseFloat(document.getElementById('sessionDuration').value) || 1;
             
-            if (name && name !== "Select a student..." && name !== "Select a class first..." && date && students[name]) {
-                students[name].sessions.push({ date, status, duration });
+            const y = selectedCalendarDate.getFullYear();
+            const m = String(selectedCalendarDate.getMonth() + 1).padStart(2, '0');
+            const d = String(selectedCalendarDate.getDate()).padStart(2, '0');
+            const dateStr = `${y}-${m}-${d}`;
+
+            if (name && name !== "Select a student..." && name !== "Select a class first..." && students[name]) {
+                students[name].sessions.push({ date: dateStr, status, duration });
                 window.saveData(); 
-                window.showMessage(`Logged ${status} for ${name}! 🌸`, "#b7e4c7");
+                window.showMessage(`Logged ${status} for ${name} on ${dateStr}! 🌸`, "#b7e4c7");
                 document.getElementById('attendanceStudent').value = "Select a student...";
             } else {
-                window.showMessage("Please select a student and a date! 🌷", "#ffafcc");
+                window.showMessage("Please select a student and ensure a date is highlighted! 🌷", "#ffafcc");
             }
         }
 
@@ -261,7 +928,7 @@
                 return;
             }
 
-            daysOfWeek.forEach(day => {
+            daysOfWeekList.forEach(day => {
                 const dayStudents = studentNames.filter(name => students[name].day === day);
                 
                 if (dayStudents.length > 0) {
@@ -338,15 +1005,15 @@
             output += `Class:          ${student.className || 'General'}\n`;
             output += `Schedule:       ${student.day || 'N/A'}s, ${student.time || 'N/A'}\n`;
             
-            if (student.billing === 'hour') { output += `Hourly Rate:    $${student.rate}/hr\n`; } 
-            else { output += `Session Rate:   $${student.rate}/session\n`; }
+            if (student.billing === 'hour') output += `Hourly Rate:    $${student.rate}/hr\n`; 
+            else output += `Session Rate:   $${student.rate}/session\n`; 
             
             output += `--------------------------------\n`;
             output += `Total Classes Logged: ${student.sessions.length}\n`;
             output += `Classes Attended:     ${presentDays.length} ✅\n`;
             output += `Classes on Leave:     ${leaveDays.length} ☕\n`;
             
-            if (student.billing === 'hour' && presentDays.length > 0) { output += `Total Hours Taught:   ${hoursBilled} hrs\n`; }
+            if (student.billing === 'hour' && presentDays.length > 0) output += `Total Hours Taught:   ${hoursBilled} hrs\n`; 
             
             output += `--------------------------------\n`;
             output += `TOTAL AMOUNT DUE:     $${total}\n\n`;
@@ -359,7 +1026,8 @@
         }
 
         window.onload = function() {
-            document.getElementById('classDate').valueAsDate = new Date();
+            window.renderCalendar();
+
             const todayIndex = new Date().getDay();
             const jsDaysToDropdownDays = [6, 0, 1, 2, 3, 4, 5]; 
             document.getElementById('logDayFilter').selectedIndex = jsDaysToDropdownDays[todayIndex];
@@ -368,3 +1036,5 @@
             window.updateInvoiceDropdown();
         };
     </script>
+</body>
+</html>
