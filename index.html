@@ -172,11 +172,23 @@
         .income-summary { background: var(--pastel-green); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 2px dashed #b7e4c7; }
         .summary-item { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; font-size: 1.1rem; }
         .summary-item strong { color: var(--pastel-purple); }
-        .income-table { background: #fff; border-radius: 12px; overflow: hidden; border: 2px dashed var(--pastel-blue); }
-        .table-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; gap: 0; border-bottom: 1px dashed var(--pastel-blue); padding: 12px; align-items: center; }
+        
+        .income-table { background: #fff; border-radius: 12px; overflow: hidden; border: 2px dashed var(--pastel-blue); margin-bottom: 20px; }
+        .table-row { display: grid; grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 1fr; gap: 0; border-bottom: 1px dashed var(--pastel-blue); padding: 12px; align-items: center; }
         .table-header { background: var(--pastel-blue); font-weight: 700; color: var(--text-main); }
         .table-row:hover { background: rgba(255,255,255,0.9); }
-        .table-cell { padding: 0 8px; font-size: 0.9rem; }
+        .table-cell { padding: 0 8px; font-size: 0.85rem; }
+
+        .invoice-section { background: rgba(255,255,255,0.8); border: 2px dashed var(--pastel-purple); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .invoice-card { background: #fff; border: 2px solid var(--pastel-pink); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .invoice-card h4 { margin: 0 0 10px 0; color: var(--pastel-purple); font-size: 1rem; }
+        .invoice-card p { margin: 5px 0; font-size: 0.85rem; line-height: 1.4; }
+        .invoice-btn { background: var(--pastel-blue); box-shadow: 0 4px 0 var(--pastel-blue-dark); width: 100%; padding: 8px; margin: 5px 0 0 0; font-size: 0.9rem; }
+        .invoice-btn:hover { background: var(--pastel-blue-dark); }
+
+        .paid-checkbox { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+        .paid-checkbox input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; margin: 0; }
+        .paid-checkbox label { margin: 0; cursor: pointer; flex: 1; font-weight: 600; }
 
         /* Notification */
         #toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; border: 3px solid var(--pastel-pink-dark); padding: 15px; border-radius: 15px; z-index: 100; font-weight: bold; transition: opacity 0.3s; opacity: 0;}
@@ -194,6 +206,16 @@
         .rate-option label { display: inline; margin-bottom: 0; }
         .hours-input { display: none; }
         .hours-input.show { display: block; }
+
+        /* Modal for Invoice */
+        .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: var(--paper-color); border: 3px solid var(--pastel-purple); border-radius: 15px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; color: var(--pastel-purple); }
+        .modal-close { background: #ffc2c2; color: #d14949; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1.2rem; padding: 0; }
+        .invoice-text { background: rgba(255,255,255,0.9); border: 2px dashed var(--pastel-blue); border-radius: 8px; padding: 15px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+        .copy-btn { background: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7; }
     </style>
 </head>
 <body>
@@ -201,7 +223,7 @@
     <div class="notebook">
         <div class="tape"></div>
         <h1>
-            ✨ Miss C's Classroom ✨
+            ✨ Tutor Notes ✨
             <span id="cloudStatus" class="cloud-status">⚠️ Offline Mode (Data saves to this device only)</span>
         </h1>
 
@@ -290,11 +312,11 @@
 
             <div class="income-summary">
                 <div class="summary-item">
-                    <strong>Total Sessions:</strong>
+                    <strong>Total Sessions (Paid):</strong>
                     <span id="totalSessions" style="font-size: 1.3rem; color: var(--pastel-purple);">0</span>
                 </div>
                 <div class="summary-item">
-                    <strong>Total Income:</strong>
+                    <strong>Total Income (Paid):</strong>
                     <span id="totalIncome" style="font-size: 1.3rem; color: var(--pastel-purple);">$0.00</span>
                 </div>
                 <div class="summary-item">
@@ -303,16 +325,21 @@
                 </div>
             </div>
 
+            <h4 style="color: var(--pastel-purple); margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px;">📊 Student Payment Tracking</h4>
             <div class="income-table">
                 <div class="table-row table-header">
-                    <div class="table-cell">Student Name</div>
-                    <div class="table-cell">School / Grade</div>
+                    <div class="table-cell">Student</div>
+                    <div class="table-cell">Classes</div>
                     <div class="table-cell">Sessions</div>
                     <div class="table-cell">Rate</div>
-                    <div class="table-cell">Total Income</div>
+                    <div class="table-cell">Total</div>
+                    <div class="table-cell">Paid</div>
                 </div>
                 <div id="incomeTableBody"></div>
             </div>
+
+            <h4 style="color: var(--pastel-purple); margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px;">📧 Generate Invoices</h4>
+            <div id="invoiceContainer"></div>
         </div>
 
         <!-- ADD STUDENT TAB -->
@@ -394,6 +421,18 @@
         </div>
     </div>
 
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📧 Invoice Message</h2>
+                <button class="modal-close" onclick="closeInvoiceModal()">✕</button>
+            </div>
+            <div id="invoiceMessageContainer"></div>
+            <button class="copy-btn" onclick="copyInvoiceText()">📋 Copy to Clipboard</button>
+        </div>
+    </div>
+
     <div id="toast">Message here</div>
 
     <script type="module">
@@ -421,6 +460,7 @@
         let monthPlanDate = new Date();
         let incomeDate = new Date();
         let selectedFilters = { schools: [], grades: [], courses: [] };
+        let currentInvoiceText = '';
 
         // --- FIREBASE INIT ---
         let db;
@@ -571,12 +611,14 @@
             Object.keys(selectedAttendance).forEach(name => {
                 if (!students[name].sessions) students[name].sessions = [];
                 
-                if (selectedAttendance[name]) {
-                    if (!students[name].sessions.includes(dateStr)) {
-                        students[name].sessions.push(dateStr);
-                        saved = true;
-                    }
-                } else {
+                const isCurrentlyChecked = selectedAttendance[name];
+                const wasAttended = students[name].sessions.includes(dateStr);
+
+                if (isCurrentlyChecked && !wasAttended) {
+                    students[name].sessions.push(dateStr);
+                    saved = true;
+                } 
+                else if (!isCurrentlyChecked && wasAttended) {
                     const idx = students[name].sessions.indexOf(dateStr);
                     if (idx > -1) {
                         students[name].sessions.splice(idx, 1);
@@ -589,7 +631,7 @@
                 await save();
                 showMsg(`Attendance saved for ${selectedDate.toLocaleDateString()}! 🌿`);
             } else {
-                showMsg('No changes to save');
+                showMsg('No changes to save. Attendance already recorded or no students selected. ✓');
             }
         };
 
@@ -664,7 +706,6 @@
                 if (s.course) courses.add(s.course);
             });
 
-            // Schools
             const schoolHTML = Array.from(schools).sort().map(school => `
                 <label class="filter-checkbox">
                     <input type="checkbox" value="${school}" onchange="updateSelectedFilters()">
@@ -673,7 +714,6 @@
             `).join('');
             document.getElementById('schoolFilter').innerHTML = schoolHTML;
 
-            // Grades (in order)
             const gradeOrder = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10'];
             const gradeHTML = gradeOrder.filter(g => grades.has(g)).map(grade => `
                 <label class="filter-checkbox">
@@ -683,7 +723,6 @@
             `).join('');
             document.getElementById('gradeFilter').innerHTML = gradeHTML;
 
-            // Courses
             const courseHTML = Array.from(courses).sort().map(course => `
                 <label class="filter-checkbox">
                     <input type="checkbox" value="${course}" onchange="updateSelectedFilters()">
@@ -712,7 +751,6 @@
                     const s = students[name];
                     const matchesDay = s.day === day;
                     
-                    // Apply filters
                     const schoolsEmpty = selectedFilters.schools.length === 0;
                     const gradesEmpty = selectedFilters.grades.length === 0;
                     const coursesEmpty = selectedFilters.courses.length === 0;
@@ -795,45 +833,116 @@
                         sessionIncome = monthSessions.length * s.rate;
                     }
 
-                    totalIncome += sessionIncome;
-                    totalSessions += monthSessions.length;
+                    const isPaid = s.paid && s.paid[`${y}-${m}`] ? true : false;
 
                     incomeData.push({
                         name,
                         school: s.schoolName || 'N/A',
                         grade: s.studentGrade || 'N/A',
+                        course: s.course || 'General',
                         sessions: monthSessions.length,
+                        monthSessions,
                         rateDisplay: s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h)` : `$${s.rate}/session`,
-                        income: sessionIncome
+                        income: sessionIncome,
+                        isPaid: isPaid
                     });
+
+                    if (isPaid) {
+                        totalIncome += sessionIncome;
+                        totalSessions += monthSessions.length;
+                    }
                 }
             });
 
-            // Update summary
             document.getElementById('totalSessions').innerText = totalSessions;
             document.getElementById('totalIncome').innerText = `$${totalIncome.toFixed(2)}`;
             document.getElementById('avgPerSession').innerText = totalSessions > 0 ? `$${(totalIncome / totalSessions).toFixed(2)}` : '$0.00';
 
-            // Render table
             let tableHTML = '';
             incomeData.sort((a, b) => b.income - a.income).forEach(item => {
+                const paidCheckId = `paid-${item.name}-${y}-${m}`;
                 tableHTML += `
                     <div class="table-row">
                         <div class="table-cell"><strong>${item.name}</strong></div>
-                        <div class="table-cell">${item.school} / ${item.grade}</div>
+                        <div class="table-cell">${item.course}</div>
                         <div class="table-cell">${item.sessions}</div>
                         <div class="table-cell">${item.rateDisplay}</div>
                         <div class="table-cell"><strong>$${item.income.toFixed(2)}</strong></div>
+                        <div class="table-cell">
+                            <input type="checkbox" id="${paidCheckId}" ${item.isPaid ? 'checked' : ''} onchange="togglePaymentStatus('${item.name}', ${y}, ${m})">
+                        </div>
                     </div>
                 `;
             });
 
             document.getElementById('incomeTableBody').innerHTML = tableHTML;
+
+            // Render invoice section
+            let invoiceHTML = '';
+            incomeData.forEach(item => {
+                const dates = item.monthSessions.map(dateStr => {
+                    const d = new Date(dateStr);
+                    return `${d.getDate()}/${d.getMonth() + 1}`;
+                }).join(', ');
+
+                const firstName = item.name.split(' ')[0];
+                invoiceHTML += `
+                    <div class="invoice-card">
+                        <h4>👤 ${item.name} (${item.school} - ${item.grade})</h4>
+                        <p><strong>Course:</strong> ${item.course}</p>
+                        <p><strong>Sessions:</strong> ${item.sessions} (${dates})</p>
+                        <p><strong>Rate:</strong> ${item.rateDisplay}</p>
+                        <p><strong>Total Amount:</strong> $${item.income.toFixed(2)}</p>
+                        <button class="invoice-btn" onclick="generateInvoice('${firstName}', '${item.name}', '${dates}', ${item.sessions}, '${item.rateDisplay}', ${item.income.toFixed(2)})">Generate Invoice 📧</button>
+                    </div>
+                `;
+            });
+
+            document.getElementById('invoiceContainer').innerHTML = invoiceHTML;
         };
 
         window.changeIncomeMonth = (dir) => {
             incomeDate.setMonth(incomeDate.getMonth() + dir);
             renderIncomeStatement();
+        };
+
+        window.togglePaymentStatus = async (name, year, month) => {
+            if (!students[name].paid) students[name].paid = {};
+            const key = `${year}-${month}`;
+            students[name].paid[key] = !students[name].paid[key];
+            await save();
+            renderIncomeStatement();
+            showMsg(`${name}'s payment status updated! ✓`);
+        };
+
+        window.generateInvoice = (firstName, fullName, dates, sessions, rate, total) => {
+            const invoiceMessage = `Dear ${firstName}'s parents,
+
+${firstName} has attended classes on: ${dates}
+Total Sessions: ${sessions}
+Rate: ${rate}
+Total Amount Due: $${total}
+
+Please transfer the fee through:
+• FPS
+• Payme
+• AlipayHK
+
+Thank you!`;
+
+            currentInvoiceText = invoiceMessage;
+            document.getElementById('invoiceMessageContainer').innerHTML = `<div class="invoice-text">${invoiceMessage}</div>`;
+            document.getElementById('invoiceModal').classList.add('show');
+        };
+
+        window.closeInvoiceModal = () => {
+            document.getElementById('invoiceModal').classList.remove('show');
+        };
+
+        window.copyInvoiceText = () => {
+            navigator.clipboard.writeText(currentInvoiceText).then(() => {
+                showMsg('Invoice copied to clipboard! 📋');
+            });
         };
 
         // --- RATE TYPE TOGGLE ---
@@ -872,7 +981,8 @@
             students[name] = { 
                 schoolName, studentGrade, course, phone, socials, day, timeStart, timeEnd, rateType, rate, 
                 hoursPerSession: rateType === 'hour' ? hoursPerSession : null,
-                sessions: students[name] ? students[name].sessions : [] 
+                sessions: students[name] ? students[name].sessions : [],
+                paid: students[name] && students[name].paid ? students[name].paid : {}
             };
             
             await save();
