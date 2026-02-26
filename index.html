@@ -7,12 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fce4ec; /* Soft pastel pink background */
-            --paper-color: #fffaf0; /* Warm off-white paper */
-            --line-color: #e1e8ed; /* Ruled lines */
-            --margin-line: #ffadad; /* Red margin line */
-            --text-main: #5c4d4d; /* Soft dark brown/grey */
-
+            --bg-color: #fce4ec; 
+            --paper-color: #fffaf0; 
+            --line-color: #e1e8ed; 
+            --margin-line: #ffadad; 
+            --text-main: #5c4d4d; 
+            
             /* Pastel Accents */
             --pastel-pink: #ffc8dd;
             --pastel-pink-dark: #ffafcc;
@@ -39,10 +39,8 @@
         /* The Notebook Container */
         .notebook {
             background-color: var(--paper-color);
-            /* Creating the ruled paper effect */
             background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
             background-size: 100% 2em;
-
             border-left: 2px solid var(--margin-line);
             border-radius: 5px 20px 20px 5px;
             box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.08);
@@ -56,13 +54,26 @@
         .notebook::before {
             content: '';
             position: absolute;
-            top: 0;
-            bottom: 0;
+            top: 0; 
+            bottom: 0; 
             left: 15px;
             width: 20px;
             background-image: radial-gradient(circle, var(--bg-color) 6px, transparent 7px);
             background-size: 100% 4em;
             background-repeat: repeat-y;
+        }
+
+        /* Cute tape decoration */
+        .tape {
+            background-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            width: 100px;
+            height: 30px;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            z-index: 2;
         }
 
         h1, h2, h3 {
@@ -77,6 +88,17 @@
             margin-bottom: 20px;
             text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--pastel-blue);
             line-height: 1.2;
+            position: relative;
+        }
+        
+        .cloud-status {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            color: var(--pastel-pink-dark);
+            text-shadow: none;
+            display: block;
+            margin-top: 5px;
+            font-weight: 700;
         }
 
         h3 {
@@ -87,6 +109,61 @@
             margin-bottom: 15px;
         }
 
+        /* --- TABS --- */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--pastel-blue);
+            padding-bottom: 0;
+            overflow-x: auto;
+        }
+        
+        .tab-btn {
+            background-color: #fff;
+            border: 2px dashed var(--pastel-blue);
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            color: var(--pastel-purple);
+            box-shadow: none;
+            width: auto;
+            margin-top: 0;
+            opacity: 0.6;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .tab-btn:active {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .tab-btn.active {
+            background-color: var(--pastel-blue);
+            color: var(--text-main);
+            opacity: 1;
+            border-style: solid;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Forms & Sections */
         .section {
             background: rgba(255, 255, 255, 0.6);
             border-radius: 15px;
@@ -125,6 +202,14 @@
 
         input:focus, select:focus {
             border-color: var(--pastel-purple);
+        }
+
+        .form-group {
+            background: rgba(255,255,255,0.4);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px dashed var(--pastel-pink);
         }
 
         button {
@@ -175,7 +260,93 @@
             line-height: 1.5;
             color: var(--text-main);
             margin-top: 15px;
-            display: none; /* Hidden until generated */
+            display: none;
+        }
+
+        /* Directory Styling */
+        .day-header {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2rem;
+            color: var(--pastel-pink-dark);
+            border-bottom: 3px dashed var(--pastel-pink);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            width: 100%;
+        }
+        
+        .class-header {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--pastel-blue-dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .student-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px dashed var(--pastel-pink-dark);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        
+        /* Delete Button on Cards */
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffc2c2;
+            color: #d14949;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 2px 0px #e69c9c;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .delete-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 0px 0px #e69c9c;
+        }
+
+        .student-card h4 {
+            margin: 0 0 10px 0;
+            color: var(--pastel-purple);
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            padding-right: 25px; /* space for delete btn */
+        }
+        .student-card p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+        .student-card .icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
         }
 
         /* Custom Notification Toast */
@@ -188,7 +359,7 @@
             border-radius: 15px;
             padding: 16px;
             position: fixed;
-            z-index: 1;
+            z-index: 10;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
@@ -205,98 +376,16 @@
             opacity: 1;
             bottom: 50px;
         }
-
-        /* Cute tape decoration */
-        .tape {
-            background-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            width: 100px;
-            height: 30px;
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-2deg);
-            z-index: 2;
-        }
-
-        /* --- NEW TAB STYLES --- */
-        .tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-            border-bottom: 2px dashed var(--pastel-blue);
-            padding-bottom: 0;
-            overflow-x: auto;
-        }
-        .tab-btn {
-            background-color: #fff;
-            border: 2px dashed var(--pastel-blue);
-            border-bottom: none;
-            border-radius: 10px 10px 0 0;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 700;
-            color: var(--pastel-purple);
-            box-shadow: none;
-            width: auto;
-            margin-top: 0;
-            opacity: 0.6;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .tab-btn:active {
-            transform: none;
-            box-shadow: none;
-        }
-        .tab-btn.active {
-            background-color: var(--pastel-blue);
-            color: var(--text-main);
-            opacity: 1;
-            border-style: solid;
-        }
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Directory Cards */
-        .directory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-        }
-        .student-card {
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px dashed var(--pastel-pink-dark);
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 0.95rem;
-        }
-        .student-card h4 {
-            margin: 0 0 10px 0;
-            color: var(--pastel-purple);
-            font-family: 'Caveat', cursive;
-            font-size: 1.8rem;
-            border-bottom: 1px solid #eee;
-        }
-        .student-card p {
-            margin: 5px 0;
-        }
     </style>
 </head>
 <body>
 
     <div class="notebook">
         <div class="tape"></div>
-        <h1>✨ Tutor Notes ✨</h1>
+        <h1>
+            ✨ Tutor Notes ✨
+            <span id="cloudStatus" class="cloud-status">☁️ Local Mode (Sync Offline)</span>
+        </h1>
 
         <!-- TABS -->
         <div class="tabs">
@@ -309,9 +398,30 @@
         <!-- SECTION 1: HOME (LOG ATTENDANCE) -->
         <div id="homeTab" class="section tab-content active">
             <h3>📅 Log Attendance</h3>
-            <label>Select Student</label>
-            <select id="attendanceStudent" onchange="checkBillingType()"><option>Add a student first...</option></select>
+            
+            <div class="form-group">
+                <label>1. Select Day</label>
+                <select id="logDayFilter" onchange="updateLogClassDropdown()">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
 
+                <label>2. Select Class / Time</label>
+                <select id="logClassFilter" onchange="updateLogStudentDropdown()">
+                    <option disabled selected>Select a day first...</option>
+                </select>
+
+                <label>3. Select Student</label>
+                <select id="attendanceStudent" onchange="checkBillingType()">
+                    <option disabled selected>Select a class first...</option>
+                </select>
+            </div>
+            
             <label>Date of Class</label>
             <input type="date" id="classDate">
 
@@ -319,57 +429,90 @@
                 <label>Duration (Hours)</label>
                 <input type="number" id="sessionDuration" value="1" step="0.5" min="0.5">
             </div>
-
+            
             <label>Status</label>
             <select id="classStatus">
                 <option value="Present">Present (Billable) ✅</option>
                 <option value="Leave">On Leave (Not Billable) ☕</option>
             </select>
-
+            
             <button class="btn-green" onclick="logAttendance()">Save Session 🌿</button>
         </div>
 
         <!-- SECTION 2: DIRECTORY -->
         <div id="directoryTab" class="section tab-content">
-            <h3>📋 Student Directory</h3>
-            <div id="directoryGrid" class="directory-grid">
-                <!-- Directory cards will be generated here by JS -->
+            <h3>📋 Organized Directory</h3>
+            <div id="directoryContainer">
+                <!-- Directory generated here by JS -->
             </div>
         </div>
 
         <!-- SECTION 3: ADD STUDENT -->
         <div id="addTab" class="section tab-content">
-            <h3>📖 Add a New Student</h3>
-            <label>Student Name</label>
-            <input type="text" id="studentName" placeholder="e.g., Alex Smith">
+            <h3>📖 Add/Edit Student</h3>
+            
+            <div class="form-group">
+                <label>Student Name</label>
+                <input type="text" id="studentName" placeholder="e.g., Alex Smith">
+                
+                <label>Grade Level</label>
+                <select id="gradeLevel">
+                    <option value="" disabled selected>Select Grade...</option>
+                    <option value="Grade 1">Grade 1</option>
+                    <option value="Grade 2">Grade 2</option>
+                    <option value="Grade 3">Grade 3</option>
+                    <option value="Grade 4">Grade 4</option>
+                    <option value="Grade 5">Grade 5</option>
+                    <option value="Grade 6">Grade 6</option>
+                    <option value="Grade 7">Grade 7</option>
+                    <option value="Grade 8">Grade 8</option>
+                    <option value="Grade 9">Grade 9</option>
+                    <option value="High School">High School</option>
+                    <option value="Other">Other</option>
+                </select>
 
-            <label>Day of the Week</label>
-            <select id="dayOfWeek">
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-            </select>
+                <label>School</label>
+                <input type="text" id="schoolName" placeholder="e.g., Lincoln Middle School">
 
-            <label>Time Slot (24-Hour)</label>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="time" id="startTime" style="margin-bottom: 0;">
-                <span style="align-self: center; color: var(--pastel-purple); font-weight: 600;">to</span>
-                <input type="time" id="endTime" style="margin-bottom: 0;">
+                <label>Parent's Phone Number</label>
+                <input type="tel" id="parentPhone" placeholder="e.g., (555) 123-4567">
+
+                <label>Social Media / Contact</label>
+                <input type="text" id="socialMedia" placeholder="e.g., LINE ID, WhatsApp, or Instagram">
             </div>
 
-            <label>Billing Method</label>
-            <select id="billingType">
-                <option value="session">Per Session</option>
-                <option value="hour">Per Hour</option>
-            </select>
+            <div class="form-group">
+                <label>Class Name</label>
+                <input type="text" id="className" placeholder="e.g., Algebra 101 or 14:00 Session">
 
-            <label>Rate ($)</label>
-            <input type="number" id="rate" placeholder="e.g., 50">
+                <label>Day of the Week</label>
+                <select id="dayOfWeek">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
 
+                <label>Time Slot (24-Hour)</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="time" id="startTime" style="margin-bottom: 0;">
+                    <span style="align-self: center; color: var(--pastel-purple); font-weight: 600;">to</span>
+                    <input type="time" id="endTime" style="margin-bottom: 0;">
+                </div>
+
+                <label>Billing Method</label>
+                <select id="billingType">
+                    <option value="session">Per Session</option>
+                    <option value="hour">Per Hour</option>
+                </select>
+                
+                <label>Rate ($)</label>
+                <input type="number" id="rate" placeholder="e.g., 50">
+            </div>
+            
             <button onclick="addStudent()">Save Student 💖</button>
         </div>
 
@@ -378,7 +521,7 @@
             <h3>💌 Generate Invoice</h3>
             <label>Select Student</label>
             <select id="invoiceStudent"><option>Add a student first...</option></select>
-
+            
             <button class="btn-blue" onclick="generateInvoice()">Create Invoice ☁️</button>
             <pre id="invoiceOutput"></pre>
         </div>
@@ -387,17 +530,123 @@
     <!-- Notification Area -->
     <div id="toast">Message here</div>
 
-    <script>
-        // Load data from Local Storage, or start fresh if nothing exists
-        let students = JSON.parse(localStorage.getItem('aestheticTutorData')) || {};
+    <!-- MAIN SCRIPT AREA -->
+    <!-- Notice type="module" is required for Cloud Database Imports to work -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Helper function to save data automatically
-        function saveData() {
-            localStorage.setItem('aestheticTutorData', JSON.stringify(students));
+        // --- 1. CLOUD CONFIGURATION ---
+        let firebaseConfig = {};
+        
+        // This checks if we are running in a smart environment
+        if (typeof __firebase_config !== 'undefined') {
+            firebaseConfig = JSON.parse(__firebase_config);
+        } else {
+            
+            // 👇 TUTOR NOTE: PASTE YOUR FIREBASE KEYS BELOW THIS LINE 👇
+            firebaseConfig = {
+                 apiKey: "AIzaSyD4-pFeF0ixzfHdGcv01AhI4nRtp9oTnkM",
+                  authDomain: "classroom-tracker-18ab8.firebaseapp.com",
+                  projectId: "classroom-tracker-18ab8",
+                  storageBucket: "classroom-tracker-18ab8.firebasestorage.app",
+                  messagingSenderId: "119632501455",
+                  appId: "1:119632501455:web:c23d4d692e948b64a435ba",
+                  measurementId: "G-YJ0D0LGB9E"
+            };
+            // 👆 PASTE ABOVE THIS LINE 👆
+            
         }
 
-        // Cute Notification Function
-        function showMessage(msg, colorHex) {
+        // --- 2. LOCAL DATA FALLBACK ---
+        // Always load local data immediately so the app opens instantly
+        let students = JSON.parse(localStorage.getItem('aestheticTutorData')) || {};
+        const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+        let app, auth, db, appId, currentUser = null;
+
+        // --- 3. CLOUD CONNECTION LOGIC ---
+        // Only try to connect if real keys exist (not the placeholder "YOUR_API_KEY"), 
+        // otherwise stay safely in Local Mode!
+        if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+            try {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                appId = typeof __app_id !== 'undefined' ? __app_id : 'pastel-tutor-tracker';
+
+                // Secure Login behind the scenes
+                const initAuth = async () => {
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch(e) {
+                        console.log("Auth Issue. Sticking to Local Mode.");
+                    }
+                };
+                initAuth();
+
+                // When logged in securely, fetch data!
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        const cloudStatus = document.getElementById('cloudStatus');
+                        cloudStatus.innerText = '☁️ Cloud Synced';
+                        cloudStatus.style.color = '#b7e4c7'; // Turn it green so you know it works!
+                        loadFromCloud();
+                    }
+                });
+            } catch(e) {
+                console.error("Firebase setup error:", e);
+            }
+        }
+
+        function loadFromCloud() {
+            if (!currentUser || !db) return;
+            const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'tutorApp', 'studentsData');
+            
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    // Update our data with the cloud's data
+                    students = docSnap.data().students || {};
+                    localStorage.setItem('aestheticTutorData', JSON.stringify(students)); // Keep local backup updated
+                    
+                    // Refresh the screens if they are open
+                    window.updateLogClassDropdown();
+                    window.updateInvoiceDropdown();
+                    if (document.getElementById('directoryTab').classList.contains('active')) {
+                        window.renderDirectory();
+                    }
+                }
+            }, (error) => {
+                console.error("Cloud Error:", error);
+            });
+        }
+
+        // --- 4. GLOBAL FUNCTIONS ---
+        // Because we are using a "module" script, we attach functions to 'window.' 
+        // so the HTML buttons can find them easily.
+        
+        window.saveData = async function() {
+            // Save locally first (instant feedback)
+            localStorage.setItem('aestheticTutorData', JSON.stringify(students));
+
+            // Save to cloud if we are connected
+            if (currentUser && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'tutorApp', 'studentsData');
+                    await setDoc(docRef, { students: students });
+                } catch(e) {
+                    console.error("Could not reach cloud:", e);
+                }
+            }
+        }
+
+        window.showMessage = function(msg, colorHex) {
             const toast = document.getElementById("toast");
             toast.innerText = msg;
             toast.style.borderColor = colorHex || "#ffafcc";
@@ -405,71 +654,91 @@
             setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
         }
 
-        // --- NEW TAB FUNCTIONS ---
-        function openTab(evt, tabId) {
-            // Hide all tab content
+        window.openTab = function(evt, tabId) {
             const tabContents = document.getElementsByClassName("tab-content");
             for (let i = 0; i < tabContents.length; i++) {
                 tabContents[i].classList.remove("active");
             }
-
-            // Remove active class from all buttons
+            
             const tabBtns = document.getElementsByClassName("tab-btn");
             for (let i = 0; i < tabBtns.length; i++) {
                 tabBtns[i].classList.remove("active");
             }
-
-            // Show current tab and add active class to button
+            
             document.getElementById(tabId).classList.add("active");
             evt.currentTarget.classList.add("active");
 
-            // If opening directory, render the student cards dynamically
             if (tabId === 'directoryTab') {
-                renderDirectory();
+                window.renderDirectory();
+            } else if (tabId === 'homeTab') {
+                window.updateLogClassDropdown();
             }
         }
 
-        function renderDirectory() {
-            const grid = document.getElementById('directoryGrid');
-            grid.innerHTML = ''; // Clear previous items
+        window.updateLogClassDropdown = function() {
+            const selectedDay = document.getElementById('logDayFilter').value;
+            const classSelect = document.getElementById('logClassFilter');
+            const studentSelect = document.getElementById('attendanceStudent');
+            
+            let classesOnDay = new Set();
+            for (let name in students) {
+                if (students[name].day === selectedDay) {
+                    classesOnDay.add(students[name].className || "General");
+                }
+            }
 
+            classSelect.innerHTML = ''; 
+            
+            if (classesOnDay.size === 0) {
+                classSelect.innerHTML = '<option disabled selected>No classes scheduled this day</option>';
+                studentSelect.innerHTML = '<option disabled selected>No students available</option>';
+            } else {
+                classSelect.innerHTML = '<option disabled selected>Select a class...</option>';
+                classesOnDay.forEach(cls => {
+                    classSelect.innerHTML += `<option value="${cls}">${cls}</option>`;
+                });
+                studentSelect.innerHTML = '<option disabled selected>Select a class first...</option>';
+            }
+            window.checkBillingType();
+        }
+
+        window.updateLogStudentDropdown = function() {
+            const selectedDay = document.getElementById('logDayFilter').value;
+            const selectedClass = document.getElementById('logClassFilter').value;
+            const studentSelect = document.getElementById('attendanceStudent');
+            
+            studentSelect.innerHTML = '<option disabled selected>Select a student...</option>';
+            
+            let foundStudents = false;
+            for (let name in students) {
+                const sClass = students[name].className || "General";
+                if (students[name].day === selectedDay && sClass === selectedClass) {
+                    studentSelect.innerHTML += `<option value="${name}">${name}</option>`;
+                    foundStudents = true;
+                }
+            }
+
+            if (!foundStudents) {
+                studentSelect.innerHTML = '<option disabled selected>No students in this class</option>';
+            }
+            window.checkBillingType();
+        }
+
+        window.updateInvoiceDropdown = function() {
+            const invoiceSelect = document.getElementById('invoiceStudent');
             const studentNames = Object.keys(students);
-
+            
             if (studentNames.length === 0) {
-                grid.innerHTML = '<p style="color: var(--text-main); font-style: italic;">No students yet! Head over to the Add Student tab to get started. 🎀</p>';
-                return;
+                invoiceSelect.innerHTML = '<option disabled selected>Add a student first...</option>';
+            } else {
+                invoiceSelect.innerHTML = '<option value="" disabled selected>Select a student to invoice...</option>';
+                studentNames.forEach(name => {
+                    invoiceSelect.innerHTML += `<option value="${name}">${name}</option>`;
+                });
             }
-
-            studentNames.forEach(name => {
-                const s = students[name];
-                const card = document.createElement('div');
-                card.className = 'student-card';
-                card.innerHTML = `
-                    <h4>${name}</h4>
-                    <p><strong>🗓️ Schedule:</strong> ${s.day || 'N/A'}, ${s.time || 'N/A'}</p>
-                    <p><strong>💰 Rate:</strong> $${s.rate} / ${s.billing === 'hour' ? 'hr' : 'session'}</p>
-                    <p><strong>📝 Classes Logged:</strong> ${s.sessions ? s.sessions.length : 0}</p>
-                `;
-                grid.appendChild(card);
-            });
         }
 
-        function updateDropdowns() {
-            const studentNames = Object.keys(students);
-            const options = studentNames.map(name => `<option value="${name}">${name}</option>`).join('');
-
-            const defaultOption = '<option value="" disabled selected>Select a student...</option>';
-            const fallbackOption = '<option disabled>Add a student first...</option>';
-
-            const finalHTML = studentNames.length > 0 ? defaultOption + options : fallbackOption;
-
-            document.getElementById('attendanceStudent').innerHTML = finalHTML;
-            document.getElementById('invoiceStudent').innerHTML = finalHTML;
-            checkBillingType(); // Update duration field visibility for the selected student
-        }
-
-        // Shows/Hides the duration input depending on the student's billing type
-        function checkBillingType() {
+        window.checkBillingType = function() {
             const name = document.getElementById('attendanceStudent').value;
             const container = document.getElementById('durationContainer');
             if (students[name] && students[name].billing === 'hour') {
@@ -479,64 +748,152 @@
             }
         }
 
-        function addStudent() {
+        window.addStudent = function() {
             const name = document.getElementById('studentName').value.trim();
+            const gradeLevel = document.getElementById('gradeLevel').value;
+            const schoolName = document.getElementById('schoolName').value.trim();
+            const parentPhone = document.getElementById('parentPhone').value.trim();
+            const socialMedia = document.getElementById('socialMedia').value.trim();
+            
+            let className = document.getElementById('className').value.trim();
+            if(!className) className = "General";
+
             const day = document.getElementById('dayOfWeek').value;
             const startTime = document.getElementById('startTime').value;
             const endTime = document.getElementById('endTime').value;
             const time = (startTime && endTime) ? `${startTime} - ${endTime}` : '';
             const billing = document.getElementById('billingType').value;
             const rate = parseFloat(document.getElementById('rate').value);
-
+            
             if (name && rate) {
-                // If student doesn't exist, create them. If they do, just update the details.
                 if(!students[name]) {
-                    students[name] = { rate: rate, day: day, time: time, billing: billing, sessions: [] };
-                } else {
-                    students[name].rate = rate;
-                    students[name].day = day;
-                    students[name].time = time;
-                    students[name].billing = billing;
+                    students[name] = { sessions: [] };
                 }
-
-                saveData();
-                showMessage(`Successfully added ${name}! ✨`, "#ffafcc");
+                
+                students[name].grade = gradeLevel;
+                students[name].school = schoolName;
+                students[name].phone = parentPhone;
+                students[name].social = socialMedia;
+                students[name].className = className;
+                students[name].day = day;
+                students[name].time = time;
+                students[name].billing = billing;
+                students[name].rate = rate; 
+                
+                window.saveData(); // Triggers local AND cloud save
+                window.showMessage(`Successfully saved ${name}! ✨`, "#ffafcc");
+                
                 document.getElementById('studentName').value = '';
-                document.getElementById('startTime').value = '';
-                document.getElementById('endTime').value = '';
-                document.getElementById('rate').value = '';
-                updateDropdowns();
+                document.getElementById('schoolName').value = '';
+                document.getElementById('parentPhone').value = '';
+                document.getElementById('socialMedia').value = '';
+                document.getElementById('gradeLevel').selectedIndex = 0;
+                
+                window.updateLogClassDropdown();
+                window.updateInvoiceDropdown();
             } else {
-                showMessage("Please enter both a name and a rate! 🎀", "#ffafcc");
+                window.showMessage("Please enter both a name and a rate! 🎀", "#ffafcc");
             }
         }
 
-        function logAttendance() {
+        window.logAttendance = function() {
             const name = document.getElementById('attendanceStudent').value;
             const date = document.getElementById('classDate').value;
             const status = document.getElementById('classStatus').value;
             const duration = parseFloat(document.getElementById('sessionDuration').value) || 1;
-
-            if (name && date && students[name]) {
+            
+            if (name && name !== "Select a student..." && name !== "Select a class first..." && date && students[name]) {
                 students[name].sessions.push({ date, status, duration });
-                saveData();
-                showMessage(`Logged ${status} for ${name}! 🌸`, "#b7e4c7");
+                window.saveData(); // Triggers local AND cloud save
+                window.showMessage(`Logged ${status} for ${name}! 🌸`, "#b7e4c7");
+                
+                document.getElementById('attendanceStudent').value = "Select a student...";
             } else {
-                showMessage("Please select a student and a date! 🌷", "#ffafcc");
+                window.showMessage("Please select a student and a date! 🌷", "#ffafcc");
             }
         }
 
-        function generateInvoice() {
-            const name = document.getElementById('invoiceStudent').value;
-            if (!name || !students[name]) {
-                showMessage("Please select a valid student to invoice! 🎀", "#a2d2ff");
+        window.deleteStudent = function(name) {
+            if (confirm(`Are you sure you want to completely remove ${name} from your directory?`)) {
+                delete students[name];
+                window.saveData();
+                window.renderDirectory();
+                window.updateLogClassDropdown();
+                window.updateInvoiceDropdown();
+                window.showMessage(`Removed ${name}. 🗑️`, "#ffc8dd");
+            }
+        }
+
+        window.renderDirectory = function() {
+            const container = document.getElementById('directoryContainer');
+            container.innerHTML = ''; 
+            
+            const studentNames = Object.keys(students);
+            if (studentNames.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-main); font-style: italic;">No students yet! Head over to the Add Student tab to get started. 🎀</p>';
                 return;
             }
 
+            daysOfWeek.forEach(day => {
+                const dayStudents = studentNames.filter(name => students[name].day === day);
+                
+                if (dayStudents.length > 0) {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'day-header';
+                    dayHeader.innerText = `📅 ${day}`;
+                    container.appendChild(dayHeader);
+
+                    const classGroups = {};
+                    dayStudents.forEach(name => {
+                        const cName = students[name].className || "General";
+                        if (!classGroups[cName]) classGroups[cName] = [];
+                        classGroups[cName].push(name);
+                    });
+
+                    for (let cName in classGroups) {
+                        const classHeader = document.createElement('div');
+                        classHeader.className = 'class-header';
+                        classHeader.innerHTML = `🏫 Class: ${cName}`;
+                        container.appendChild(classHeader);
+
+                        const grid = document.createElement('div');
+                        grid.className = 'directory-grid';
+
+                        classGroups[cName].forEach(name => {
+                            const s = students[name];
+                            const card = document.createElement('div');
+                            card.className = 'student-card';
+                            card.innerHTML = `
+                                <button class="delete-btn" onclick="window.deleteStudent('${name}')" title="Delete Student">✖</button>
+                                <h4>${name}</h4>
+                                <p><span class="icon">🎓</span> <strong>Grade:</strong> ${s.grade || 'N/A'}</p>
+                                <p><span class="icon">🏫</span> <strong>School:</strong> ${s.school || 'N/A'}</p>
+                                <p><span class="icon">📞</span> <strong>Parent:</strong> ${s.phone || 'N/A'}</p>
+                                <p><span class="icon">💬</span> <strong>Contact:</strong> ${s.social || 'N/A'}</p>
+                                <hr style="border: 0; border-top: 1px dashed var(--pastel-pink); margin: 10px 0;">
+                                <p><span class="icon">⏰</span> <strong>Time:</strong> ${s.time || 'N/A'}</p>
+                                <p><span class="icon">💰</span> <strong>Rate:</strong> $${s.rate} / ${s.billing === 'hour' ? 'hr' : 'session'}</p>
+                                <p><span class="icon">📝</span> <strong>Logs:</strong> ${s.sessions ? s.sessions.length : 0}</p>
+                            `;
+                            grid.appendChild(card);
+                        });
+                        container.appendChild(grid);
+                    }
+                }
+            });
+        }
+
+        window.generateInvoice = function() {
+            const name = document.getElementById('invoiceStudent').value;
+            if (!name || !students[name]) {
+                window.showMessage("Please select a valid student to invoice! 🎀", "#a2d2ff");
+                return;
+            }
+            
             const student = students[name];
             const presentDays = student.sessions.filter(s => s.status === 'Present');
             const leaveDays = student.sessions.filter(s => s.status === 'Leave');
-
+            
             let total = 0;
             let hoursBilled = 0;
 
@@ -548,42 +905,46 @@
             } else {
                 total = presentDays.length * student.rate;
             }
-
+            
             let output = `✧･ﾟ: *✧･ﾟ:* INVOICE *:･ﾟ✧*:･ﾟ✧\n\n`;
             output += `Student:        ${name.toUpperCase()}\n`;
+            output += `Class:          ${student.className || 'General'}\n`;
             output += `Schedule:       ${student.day || 'N/A'}s, ${student.time || 'N/A'}\n`;
-
+            
             if (student.billing === 'hour') {
                 output += `Hourly Rate:    $${student.rate}/hr\n`;
             } else {
                 output += `Session Rate:   $${student.rate}/session\n`;
             }
-
+            
             output += `--------------------------------\n`;
             output += `Total Classes Logged: ${student.sessions.length}\n`;
             output += `Classes Attended:     ${presentDays.length} ✅\n`;
             output += `Classes on Leave:     ${leaveDays.length} ☕\n`;
-
+            
             if (student.billing === 'hour' && presentDays.length > 0) {
                 output += `Total Hours Taught:   ${hoursBilled} hrs\n`;
             }
-
+            
             output += `--------------------------------\n`;
             output += `TOTAL AMOUNT DUE:     $${total}\n\n`;
             output += `Thank you for learning with me! 💕`;
             
             const outputEl = document.getElementById('invoiceOutput');
             outputEl.innerText = output;
-            outputEl.style.display = 'block'; // Show the box
-
-            showMessage("Invoice generated! ☁️", "#a2d2ff");
+            outputEl.style.display = 'block'; 
+            
+            window.showMessage("Invoice generated! ☁️", "#a2d2ff");
         }
 
-        // Run this when the page loads to populate dropdowns if there is saved data
         window.onload = function() {
-            updateDropdowns();
-            // Default date input to today
             document.getElementById('classDate').valueAsDate = new Date();
+            const todayIndex = new Date().getDay();
+            const jsDaysToDropdownDays = [6, 0, 1, 2, 3, 4, 5]; 
+            document.getElementById('logDayFilter').selectedIndex = jsDaysToDropdownDays[todayIndex];
+
+            window.updateLogClassDropdown();
+            window.updateInvoiceDropdown();
         };
     </script>
 </body>
