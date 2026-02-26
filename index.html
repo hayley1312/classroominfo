@@ -134,18 +134,6 @@
         .calendar-day:hover { background: var(--pastel-pink); color: #fff; }
         .calendar-day.selected { background: var(--pastel-purple); color: #fff; transform: scale(1.05); }
 
-        /* Weekly Schedule */
-        .weekly-schedule { background: #fff; border: 2px dashed var(--pastel-purple); border-radius: 12px; padding: 20px; margin-bottom: 20px; overflow-x: auto; }
-        .schedule-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .schedule-header h3 { margin: 0; color: var(--pastel-purple); }
-        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-        .day-col { border: 2px dashed var(--pastel-blue); border-radius: 8px; padding: 10px; min-height: 600px; position: relative; }
-        .day-col-header { font-weight: 700; color: var(--pastel-purple); text-align: center; padding-bottom: 10px; border-bottom: 2px solid var(--pastel-pink); margin-bottom: 10px; }
-        .time-slot { font-size: 0.75rem; color: #999; margin-top: 5px; }
-        .class-event { background: var(--pastel-pink); border-radius: 6px; padding: 6px; margin: 5px 0; font-size: 0.8rem; color: var(--text-main); border-left: 4px solid var(--pastel-pink-dark); }
-        .class-event-title { font-weight: 700; }
-        .class-event-info { font-size: 0.7rem; }
-
         /* Month Schedule */
         .month-schedule { background: #fff; border: 2px dashed var(--pastel-purple); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
         .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
@@ -156,6 +144,15 @@
 
         /* Directory UI */
         .search-bar { background: #fff; border: 2px solid var(--pastel-purple); box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .filter-section { background: rgba(255,255,255,0.8); border: 2px dashed var(--pastel-blue); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .filter-group { margin-bottom: 15px; }
+        .filter-group h4 { margin: 0 0 10px 0; color: var(--pastel-purple); font-size: 0.95rem; }
+        .filter-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .filter-checkbox { display: flex; align-items: center; background: #fff; padding: 6px 12px; border-radius: 20px; border: 2px solid var(--pastel-blue); cursor: pointer; font-size: 0.85rem; }
+        .filter-checkbox input { margin: 0; margin-right: 6px; width: auto; padding: 0; }
+        .filter-checkbox input:focus { border: none; }
+        .filter-checkbox:hover { background: var(--pastel-pink); }
+
         .day-header { font-family: 'Caveat', cursive; font-size: 2.2rem; color: var(--pastel-pink-dark); border-bottom: 3px dashed var(--pastel-pink); margin-top: 20px; margin-bottom: 10px; padding-bottom: 5px; }
         .class-header { font-size: 1.1rem; font-weight: 700; color: #fff; background: var(--pastel-blue-dark); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-top: 10px; margin-bottom: 15px; }
         .directory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
@@ -166,6 +163,20 @@
         
         .delete-btn { position: absolute; top: 10px; right: 10px; background: #ffc2c2; color: #d14949; border-radius: 50%; width: 25px; height: 25px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 0px #e69c9c; padding: 0; display: flex; align-items: center; justify-content: center; margin: 0; }
         .delete-btn:active { transform: translateY(2px); box-shadow: 0 0px 0px #e69c9c; }
+
+        /* Income Sheet */
+        .income-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .income-header h3 { margin: 0; color: var(--pastel-purple); }
+        .month-selector { display: flex; gap: 10px; align-items: center; }
+        .month-selector button { width: auto; padding: 8px 15px; margin: 0; font-size: 0.95rem; }
+        .income-summary { background: var(--pastel-green); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 2px dashed #b7e4c7; }
+        .summary-item { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; font-size: 1.1rem; }
+        .summary-item strong { color: var(--pastel-purple); }
+        .income-table { background: #fff; border-radius: 12px; overflow: hidden; border: 2px dashed var(--pastel-blue); }
+        .table-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; gap: 0; border-bottom: 1px dashed var(--pastel-blue); padding: 12px; align-items: center; }
+        .table-header { background: var(--pastel-blue); font-weight: 700; color: var(--text-main); }
+        .table-row:hover { background: rgba(255,255,255,0.9); }
+        .table-cell { padding: 0 8px; font-size: 0.9rem; }
 
         /* Notification */
         #toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; border: 3px solid var(--pastel-pink-dark); padding: 15px; border-radius: 15px; z-index: 100; font-weight: bold; transition: opacity 0.3s; opacity: 0;}
@@ -196,9 +207,9 @@
 
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab(event, 'homeTab')">🏠 Log Class</button>
-            <button class="tab-btn" onclick="openTab(event, 'scheduleTab')">📅 Weekly Schedule</button>
             <button class="tab-btn" onclick="openTab(event, 'monthTab')">📆 Month Planner</button>
             <button class="tab-btn" onclick="openTab(event, 'directoryTab')">📋 Directory</button>
+            <button class="tab-btn" onclick="openTab(event, 'incomeTab')">💰 Income</button>
             <button class="tab-btn" onclick="openTab(event, 'addTab')">➕ Add Student</button>
         </div>
 
@@ -225,21 +236,6 @@
             <button onclick="logAttendance()" style="background-color: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7;">Save Session 🌿</button>
         </div>
 
-        <!-- WEEKLY SCHEDULE TAB -->
-        <div id="scheduleTab" class="tab-content section">
-            <h3>📅 Weekly Schedule</h3>
-            <div class="schedule-header">
-                <h3 style="margin-bottom: 0;">Week of <span id="weekDisplay">Monday</span></h3>
-                <div>
-                    <button onclick="changeWeek(-1)" style="width: auto; padding: 8px 15px; margin-right: 5px;">◀ Prev</button>
-                    <button onclick="changeWeek(1)" style="width: auto; padding: 8px 15px;">Next ▶</button>
-                </div>
-            </div>
-            <div class="weekly-schedule">
-                <div class="week-grid" id="weekGrid"></div>
-            </div>
-        </div>
-
         <!-- MONTH PLANNER TAB -->
         <div id="monthTab" class="tab-content section">
             <h3>📆 Month Planner</h3>
@@ -259,10 +255,63 @@
         <div id="directoryTab" class="tab-content section">
             <h3>📋 Organized Directory</h3>
             
-            <input type="text" id="dirFilter" class="search-bar" placeholder="🔍 Filter by name, course, or phone number..." onkeyup="renderDirectory()">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <h4>🏫 Filter by School</h4>
+                    <div class="filter-options" id="schoolFilter"></div>
+                </div>
+                <div class="filter-group">
+                    <h4>📚 Filter by Grade</h4>
+                    <div class="filter-options" id="gradeFilter"></div>
+                </div>
+                <div class="filter-group">
+                    <h4>📖 Filter by Course</h4>
+                    <div class="filter-options" id="courseFilter"></div>
+                </div>
+            </div>
             
             <div id="directoryContainer">
                 <!-- Students will populate here -->
+            </div>
+        </div>
+
+        <!-- INCOME TAB -->
+        <div id="incomeTab" class="tab-content section">
+            <h3>💰 Monthly Income Statement</h3>
+            
+            <div class="income-header">
+                <h3 style="margin: 0;">Income Summary</h3>
+                <div class="month-selector">
+                    <button onclick="changeIncomeMonth(-1)" style="width: auto; padding: 8px 12px; margin: 0;">◀</button>
+                    <span id="incomeMonthDisplay" style="min-width: 150px; text-align: center; font-weight: 700; color: var(--pastel-purple);">Month Year</span>
+                    <button onclick="changeIncomeMonth(1)" style="width: auto; padding: 8px 12px; margin: 0;">▶</button>
+                </div>
+            </div>
+
+            <div class="income-summary">
+                <div class="summary-item">
+                    <strong>Total Sessions:</strong>
+                    <span id="totalSessions" style="font-size: 1.3rem; color: var(--pastel-purple);">0</span>
+                </div>
+                <div class="summary-item">
+                    <strong>Total Income:</strong>
+                    <span id="totalIncome" style="font-size: 1.3rem; color: var(--pastel-purple);">$0.00</span>
+                </div>
+                <div class="summary-item">
+                    <strong>Average per Session:</strong>
+                    <span id="avgPerSession" style="font-size: 1.3rem; color: var(--pastel-purple);">$0.00</span>
+                </div>
+            </div>
+
+            <div class="income-table">
+                <div class="table-row table-header">
+                    <div class="table-cell">Student Name</div>
+                    <div class="table-cell">School / Grade</div>
+                    <div class="table-cell">Sessions</div>
+                    <div class="table-cell">Rate</div>
+                    <div class="table-cell">Total Income</div>
+                </div>
+                <div id="incomeTableBody"></div>
             </div>
         </div>
 
@@ -273,6 +322,24 @@
             <div style="background: rgba(255,255,255,0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed var(--pastel-pink);">
                 <label>Student Name *</label>
                 <input type="text" id="studentName" placeholder="e.g. Alex Smith">
+                
+                <label>School Name *</label>
+                <input type="text" id="schoolName" placeholder="e.g. Lincoln High School">
+
+                <label>Grade *</label>
+                <select id="studentGrade">
+                    <option value="">Select Grade</option>
+                    <option value="G1">G1</option>
+                    <option value="G2">G2</option>
+                    <option value="G3">G3</option>
+                    <option value="G4">G4</option>
+                    <option value="G5">G5</option>
+                    <option value="G6">G6</option>
+                    <option value="G7">G7</option>
+                    <option value="G8">G8</option>
+                    <option value="G9">G9</option>
+                    <option value="G10">G10</option>
+                </select>
                 
                 <label>Course Name *</label>
                 <input type="text" id="courseName" placeholder="e.g. Algebra 101">
@@ -351,8 +418,9 @@
         let currentDate = new Date();
         let selectedDate = new Date();
         let selectedAttendance = {};
-        let scheduleDate = new Date();
         let monthPlanDate = new Date();
+        let incomeDate = new Date();
+        let selectedFilters = { schools: [], grades: [], courses: [] };
 
         // --- FIREBASE INIT ---
         let db;
@@ -367,7 +435,10 @@
                     if (snap.exists()) {
                         students = snap.data().students;
                         updateUI();
-                        if(document.getElementById('directoryTab').classList.contains('active')) renderDirectory();
+                        if(document.getElementById('directoryTab').classList.contains('active')) {
+                            renderFilterOptions();
+                            renderDirectory();
+                        }
                     }
                 });
             } catch (e) { console.error("Firebase connection deferred.", e); }
@@ -379,9 +450,12 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             e.currentTarget.classList.add('active');
-            if(id === 'directoryTab') renderDirectory();
-            if(id === 'scheduleTab') renderWeekSchedule();
+            if(id === 'directoryTab') {
+                renderFilterOptions();
+                renderDirectory();
+            }
             if(id === 'monthTab') renderMonthSchedule();
+            if(id === 'incomeTab') renderIncomeStatement();
         };
 
         // --- CALENDAR LOGIC ---
@@ -479,12 +553,12 @@
                 const isAttended = s.sessions && s.sessions.includes(dateStr);
                 selectedAttendance[name] = isAttended;
 
-                const rateDisplay = s.rateType === 'hour' ? `$${s.rate} / hour (${s.hoursPerSession}h)` : `$${s.rate} / session`;
+                const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h)` : `$${s.rate}/session`;
 
                 cont.innerHTML += `
                     <div class="attendance-item">
                         <input type="checkbox" id="check-${name}" ${isAttended ? 'checked' : ''} onchange="selectedAttendance['${name}'] = this.checked">
-                        <label for="check-${name}"><strong>${name}</strong> - ${s.course} (${rateDisplay})</label>
+                        <label for="check-${name}"><strong>${name}</strong> - ${s.schoolName} | ${s.studentGrade} | ${s.course} (${rateDisplay})</label>
                     </div>
                 `;
             });
@@ -519,64 +593,6 @@
             }
         };
 
-        // --- WEEKLY SCHEDULE LOGIC ---
-        window.getWeekStart = (date) => {
-            const d = new Date(date);
-            const day = d.getDay();
-            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust to start Monday
-            return new Date(d.setDate(diff));
-        };
-
-        window.renderWeekSchedule = () => {
-            const weekStart = getWeekStart(scheduleDate);
-            const weekGrid = document.getElementById('weekGrid');
-            weekGrid.innerHTML = '';
-
-            document.getElementById('weekDisplay').innerText = `${weekStart.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})} - ${new Date(weekStart.getTime() + 6*24*60*60*1000).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}`;
-
-            for (let i = 0; i < 7; i++) {
-                const dayDate = new Date(weekStart.getTime() + i*24*60*60*1000);
-                const dayName = daysOrder[i];
-                const dayNum = dayDate.getDate();
-                
-                let dayHTML = `
-                    <div class="day-col">
-                        <div class="day-col-header">${dayName}<br><span style="font-size: 0.8rem;">${dayNum}</span></div>
-                `;
-
-                // Get classes for this day
-                const dayClasses = Object.keys(students).filter(name => students[name].day === dayName);
-                const classesMap = {};
-                
-                dayClasses.forEach(name => {
-                    const s = students[name];
-                    const key = `${s.course}|${s.timeStart}|${s.timeEnd}`;
-                    if (!classesMap[key]) classesMap[key] = [];
-                    classesMap[key].push(name);
-                });
-
-                for (let key in classesMap) {
-                    const [course, start, end] = key.split('|');
-                    const count = classesMap[key].length;
-                    dayHTML += `
-                        <div class="class-event">
-                            <div class="class-event-title">${course}</div>
-                            <div class="class-event-info">${start} - ${end}</div>
-                            <div class="class-event-info">👥 ${count} student${count > 1 ? 's' : ''}</div>
-                        </div>
-                    `;
-                }
-
-                dayHTML += `</div>`;
-                weekGrid.innerHTML += dayHTML;
-            }
-        };
-
-        window.changeWeek = (dir) => {
-            scheduleDate.setDate(scheduleDate.getDate() + (dir * 7));
-            renderWeekSchedule();
-        };
-
         // --- MONTH SCHEDULE LOGIC ---
         window.renderMonthSchedule = () => {
             const monthGrid = document.getElementById('monthGrid');
@@ -585,7 +601,6 @@
             const y = monthPlanDate.getFullYear(), m = monthPlanDate.getMonth();
             document.getElementById('monthPlannerDisplay').innerText = `${new Intl.DateTimeFormat('en-US', {month:'long'}).format(monthPlanDate)} ${y}`;
 
-            // Day headers
             const dayHeaders = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
             dayHeaders.forEach(d => {
                 let headerHTML = `<div class="month-day" style="background: var(--pastel-blue); color: white; font-weight: 700; text-align: center; padding: 10px;"><strong>${d}</strong></div>`;
@@ -596,12 +611,10 @@
             const daysInMonth = new Date(y, m+1, 0).getDate();
             const adjustedFirst = firstDay === 0 ? 6 : firstDay - 1;
 
-            // Empty cells before month starts
             for(let i = 0; i < adjustedFirst; i++) {
                 monthGrid.innerHTML += '<div class="month-day" style="background: #f0f0f0;"></div>';
             }
 
-            // Days of month
             for(let i = 1; i <= daysInMonth; i++) {
                 const dayDate = new Date(y, m, i);
                 const dayOfWeekIndex = dayDate.getDay() === 0 ? 6 : dayDate.getDay() - 1;
@@ -614,7 +627,6 @@
                         <div class="month-day-num" style="${isToday ? 'color: white;' : ''}">${i}</div>
                 `;
 
-                // Get classes for this day
                 const dayClasses = Object.keys(students).filter(name => students[name].day === dayName);
                 const classesMap = {};
                 
@@ -639,10 +651,58 @@
             renderMonthSchedule();
         };
 
+        // --- DIRECTORY FILTERS ---
+        window.renderFilterOptions = () => {
+            const schools = new Set();
+            const grades = new Set();
+            const courses = new Set();
+
+            Object.keys(students).forEach(name => {
+                const s = students[name];
+                if (s.schoolName) schools.add(s.schoolName);
+                if (s.studentGrade) grades.add(s.studentGrade);
+                if (s.course) courses.add(s.course);
+            });
+
+            // Schools
+            const schoolHTML = Array.from(schools).sort().map(school => `
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="${school}" onchange="updateSelectedFilters()">
+                    <span>${school}</span>
+                </label>
+            `).join('');
+            document.getElementById('schoolFilter').innerHTML = schoolHTML;
+
+            // Grades (in order)
+            const gradeOrder = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10'];
+            const gradeHTML = gradeOrder.filter(g => grades.has(g)).map(grade => `
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="${grade}" onchange="updateSelectedFilters()">
+                    <span>${grade}</span>
+                </label>
+            `).join('');
+            document.getElementById('gradeFilter').innerHTML = gradeHTML;
+
+            // Courses
+            const courseHTML = Array.from(courses).sort().map(course => `
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="${course}" onchange="updateSelectedFilters()">
+                    <span>${course}</span>
+                </label>
+            `).join('');
+            document.getElementById('courseFilter').innerHTML = courseHTML;
+        };
+
+        window.updateSelectedFilters = () => {
+            selectedFilters.schools = Array.from(document.querySelectorAll('#schoolFilter input:checked')).map(el => el.value);
+            selectedFilters.grades = Array.from(document.querySelectorAll('#gradeFilter input:checked')).map(el => el.value);
+            selectedFilters.courses = Array.from(document.querySelectorAll('#courseFilter input:checked')).map(el => el.value);
+            renderDirectory();
+        };
+
         // --- DIRECTORY LOGIC ---
         window.renderDirectory = () => {
             const cont = document.getElementById('directoryContainer');
-            const filterText = document.getElementById('dirFilter').value.toLowerCase();
             cont.innerHTML = '';
             
             let hasResults = false;
@@ -651,10 +711,17 @@
                 const dayStudents = Object.keys(students).filter(name => {
                     const s = students[name];
                     const matchesDay = s.day === day;
-                    const matchesFilter = name.toLowerCase().includes(filterText) || 
-                                          (s.course && s.course.toLowerCase().includes(filterText)) ||
-                                          (s.phone && s.phone.includes(filterText));
-                    return matchesDay && matchesFilter;
+                    
+                    // Apply filters
+                    const schoolsEmpty = selectedFilters.schools.length === 0;
+                    const gradesEmpty = selectedFilters.grades.length === 0;
+                    const coursesEmpty = selectedFilters.courses.length === 0;
+
+                    const matchesSchool = schoolsEmpty || selectedFilters.schools.includes(s.schoolName);
+                    const matchesGrade = gradesEmpty || selectedFilters.grades.includes(s.studentGrade);
+                    const matchesCourse = coursesEmpty || selectedFilters.courses.includes(s.course);
+
+                    return matchesDay && matchesSchool && matchesGrade && matchesCourse;
                 });
 
                 if (dayStudents.length > 0) {
@@ -680,6 +747,8 @@
                                 <div class="student-card">
                                     <button class="delete-btn" onclick="deleteStudent('${name}')" title="Delete">✖</button>
                                     <h4>${name}</h4>
+                                    <p>🏫 <strong>School:</strong> ${s.schoolName || 'N/A'}</p>
+                                    <p>📚 <strong>Grade:</strong> ${s.studentGrade || 'N/A'}</p>
                                     <p>⏰ <strong>Time:</strong> ${timeRange}</p>
                                     <p>📞 <strong>Tel:</strong> ${s.phone || 'N/A'}</p>
                                     <p>💬 <strong>Social:</strong> ${s.socials || 'N/A'}</p>
@@ -696,9 +765,75 @@
             });
 
             if(!hasResults) {
-                if(filterText) cont.innerHTML = `<p style="text-align:center; margin-top: 20px;">No students match "${filterText}" 🎀</p>`;
-                else cont.innerHTML = `<p style="text-align:center; margin-top: 20px;">No students yet! Go to the Add Student tab to start. 🎀</p>`;
+                cont.innerHTML = `<p style="text-align:center; margin-top: 20px;">No students match the selected filters 🎀</p>`;
             }
+        };
+
+        // --- INCOME LOGIC ---
+        window.renderIncomeStatement = () => {
+            const y = incomeDate.getFullYear(), m = incomeDate.getMonth();
+            document.getElementById('incomeMonthDisplay').innerText = `${new Intl.DateTimeFormat('en-US', {month:'long'}).format(incomeDate)} ${y}`;
+
+            let totalIncome = 0;
+            let totalSessions = 0;
+            const incomeData = [];
+
+            Object.keys(students).forEach(name => {
+                const s = students[name];
+                if (!s.sessions) return;
+
+                const monthSessions = s.sessions.filter(dateStr => {
+                    const sessionDate = new Date(dateStr);
+                    return sessionDate.getFullYear() === y && sessionDate.getMonth() === m;
+                });
+
+                if (monthSessions.length > 0) {
+                    let sessionIncome = 0;
+                    if (s.rateType === 'hour') {
+                        sessionIncome = monthSessions.length * (s.rate * s.hoursPerSession);
+                    } else {
+                        sessionIncome = monthSessions.length * s.rate;
+                    }
+
+                    totalIncome += sessionIncome;
+                    totalSessions += monthSessions.length;
+
+                    incomeData.push({
+                        name,
+                        school: s.schoolName || 'N/A',
+                        grade: s.studentGrade || 'N/A',
+                        sessions: monthSessions.length,
+                        rateDisplay: s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h)` : `$${s.rate}/session`,
+                        income: sessionIncome
+                    });
+                }
+            });
+
+            // Update summary
+            document.getElementById('totalSessions').innerText = totalSessions;
+            document.getElementById('totalIncome').innerText = `$${totalIncome.toFixed(2)}`;
+            document.getElementById('avgPerSession').innerText = totalSessions > 0 ? `$${(totalIncome / totalSessions).toFixed(2)}` : '$0.00';
+
+            // Render table
+            let tableHTML = '';
+            incomeData.sort((a, b) => b.income - a.income).forEach(item => {
+                tableHTML += `
+                    <div class="table-row">
+                        <div class="table-cell"><strong>${item.name}</strong></div>
+                        <div class="table-cell">${item.school} / ${item.grade}</div>
+                        <div class="table-cell">${item.sessions}</div>
+                        <div class="table-cell">${item.rateDisplay}</div>
+                        <div class="table-cell"><strong>$${item.income.toFixed(2)}</strong></div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('incomeTableBody').innerHTML = tableHTML;
+        };
+
+        window.changeIncomeMonth = (dir) => {
+            incomeDate.setMonth(incomeDate.getMonth() + dir);
+            renderIncomeStatement();
         };
 
         // --- RATE TYPE TOGGLE ---
@@ -715,6 +850,8 @@
         // --- DATA LOGIC ---
         window.addStudent = async () => {
             const name = document.getElementById('studentName').value.trim();
+            const schoolName = document.getElementById('schoolName').value.trim();
+            const studentGrade = document.getElementById('studentGrade').value;
             const course = document.getElementById('courseName').value.trim() || "General";
             const phone = document.getElementById('phone').value.trim();
             const socials = document.getElementById('socials').value.trim();
@@ -726,12 +863,14 @@
             const hoursPerSession = document.getElementById('hoursPerSession').value;
             
             if(!name) return showMsg("Please enter a student name! 🎀");
+            if(!schoolName) return showMsg("Please enter school name! 🏫");
+            if(!studentGrade) return showMsg("Please select a grade! 📚");
             if(!timeStart || !timeEnd) return showMsg("Please set class time range! ⏰");
             if(!rate) return showMsg("Please enter a rate! 💰");
             if(rateType === 'hour' && !hoursPerSession) return showMsg("Please enter hours per session! ⏰");
 
             students[name] = { 
-                course, phone, socials, day, timeStart, timeEnd, rateType, rate, 
+                schoolName, studentGrade, course, phone, socials, day, timeStart, timeEnd, rateType, rate, 
                 hoursPerSession: rateType === 'hour' ? hoursPerSession : null,
                 sessions: students[name] ? students[name].sessions : [] 
             };
@@ -740,6 +879,8 @@
             showMsg(`Successfully added ${name}! 💖`);
             
             document.getElementById('studentName').value = '';
+            document.getElementById('schoolName').value = '';
+            document.getElementById('studentGrade').value = '';
             document.getElementById('courseName').value = '';
             document.getElementById('phone').value = '';
             document.getElementById('socials').value = '';
