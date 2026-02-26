@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miss C's Classroom</title>
+    <title>Aesthetic Tutor Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -216,12 +216,6 @@
         .modal-close { background: #ffc2c2; color: #d14949; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1.2rem; padding: 0; }
         .invoice-text { background: rgba(255,255,255,0.9); border: 2px dashed var(--pastel-blue); border-radius: 8px; padding: 15px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
         .copy-btn { background: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7; }
-
-        /* Invoice Generator Modal */
-        .invoice-generator { background: rgba(255,255,255,0.8); border: 2px dashed var(--pastel-purple); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        .generator-form { display: grid; gap: 15px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .generate-btn { background: var(--pastel-blue); box-shadow: 0 4px 0 var(--pastel-blue-dark); margin-top: 0; }
     </style>
 </head>
 <body>
@@ -331,27 +325,6 @@
                 </div>
             </div>
 
-            <h4 style="color: var(--pastel-purple); margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px;">📧 Generate Invoices</h4>
-            <div class="invoice-generator">
-                <div class="generator-form">
-                    <div class="form-row">
-                        <div>
-                            <label>Select Month *</label>
-                            <select id="invoiceMonth">
-                                <option value="">Choose Month</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Select Student *</label>
-                            <select id="invoiceStudent">
-                                <option value="">Choose Student</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="generate-btn" onclick="generateSelectedInvoice()">Generate Invoice 📧</button>
-                </div>
-            </div>
-
             <h4 style="color: var(--pastel-purple); margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px;">📊 Student Payment Tracking</h4>
             <div class="income-table">
                 <div class="table-row table-header">
@@ -364,6 +337,9 @@
                 </div>
                 <div id="incomeTableBody"></div>
             </div>
+
+            <h4 style="color: var(--pastel-purple); margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px;">📧 Generate Invoices</h4>
+            <div id="invoiceContainer"></div>
         </div>
 
         <!-- ADD STUDENT TAB -->
@@ -488,7 +464,7 @@
 
         // --- FIREBASE INIT ---
         let db;
-        if (firebaseConfig.apiKey !== "AIzaSyD4-pFeF0ixzfHdGcv01AhI4nRtp9oTnkM") {
+        if (firebaseConfig.apiKey !== "PASTE_HERE") {
             try {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -839,16 +815,10 @@
             let totalIncome = 0;
             let totalSessions = 0;
             const incomeData = [];
-            const uniqueMonths = new Set();
 
             Object.keys(students).forEach(name => {
                 const s = students[name];
                 if (!s.sessions) return;
-
-                s.sessions.forEach(dateStr => {
-                    const sessionDate = new Date(dateStr);
-                    uniqueMonths.add(`${sessionDate.getFullYear()}-${sessionDate.getMonth()}`);
-                });
 
                 const monthSessions = s.sessions.filter(dateStr => {
                     const sessionDate = new Date(dateStr);
@@ -877,26 +847,13 @@
                         isPaid: isPaid
                     });
 
+                    // Only add to totals if PAID
                     if (isPaid) {
                         totalIncome += sessionIncome;
                         totalSessions += monthSessions.length;
                     }
                 }
             });
-
-            // Populate invoice month dropdown
-            const monthDropdown = document.getElementById('invoiceMonth');
-            const sortedMonths = Array.from(uniqueMonths).sort().reverse();
-            monthDropdown.innerHTML = '<option value="">Choose Month</option>';
-            sortedMonths.forEach(monthKey => {
-                const [year, month] = monthKey.split('-');
-                const monthDate = new Date(year, month);
-                const monthLabel = new Intl.DateTimeFormat('en-US', {month:'long', year:'numeric'}).format(monthDate);
-                monthDropdown.innerHTML += `<option value="${monthKey}">${monthLabel}</option>`;
-            });
-
-            // Populate invoice student dropdown based on selected month
-            updateInvoiceStudents();
 
             document.getElementById('totalSessions').innerText = totalSessions;
             document.getElementById('totalIncome').innerText = `$${totalIncome.toFixed(2)}`;
@@ -922,101 +879,33 @@
             });
 
             document.getElementById('incomeTableBody').innerHTML = tableHTML;
-        };
 
-        window.updateInvoiceStudents = () => {
-            const selectedMonth = document.getElementById('invoiceMonth').value;
-            const studentDropdown = document.getElementById('invoiceStudent');
+            // Render invoice section
+            let invoiceHTML = '';
+            incomeData.forEach(item => {
+                const dates = item.monthSessions.map(dateStr => {
+                    const d = new Date(dateStr);
+                    return `${d.getDate()}/${d.getMonth() + 1}`;
+                }).join(', ');
 
-            if (!selectedMonth) {
-                studentDropdown.innerHTML = '<option value="">Choose Student</option>';
-                return;
-            }
-
-            const [year, month] = selectedMonth.split('-');
-            const y = parseInt(year), m = parseInt(month);
-            const studentsInMonth = [];
-
-            Object.keys(students).forEach(name => {
-                const s = students[name];
-                if (!s.sessions) return;
-
-                const monthSessions = s.sessions.filter(dateStr => {
-                    const sessionDate = new Date(dateStr);
-                    return sessionDate.getFullYear() === y && sessionDate.getMonth() === m;
-                });
-
-                if (monthSessions.length > 0) {
-                    studentsInMonth.push({ name, sessions: monthSessions });
-                }
+                const firstName = item.name.split(' ')[0];
+                invoiceHTML += `
+                    <div class="invoice-card" style="border-color: ${item.isPaid ? '#b7e4c7' : '#ffafcc'}; background: ${item.isPaid ? 'rgba(216, 243, 220, 0.3)' : 'rgba(255, 248, 245, 0.8)'};">
+                        <h4>👤 ${item.name} (${item.school} - ${item.grade})</h4>
+                        <p><strong>Course:</strong> ${item.course}</p>
+                        <p><strong>Sessions:</strong> ${item.sessions} (${dates})</p>
+                        <p><strong>Rate:</strong> ${item.rateDisplay}</p>
+                        <p><strong>Total Amount:</strong> $${item.income.toFixed(2)}</p>
+                        <div class="paid-checkbox">
+                            <input type="checkbox" id="inv-paid-${item.name}" ${item.isPaid ? 'checked' : ''} onchange="togglePaymentStatus('${item.name}', ${y}, ${m})">
+                            <label for="inv-paid-${item.name}"><strong>${item.isPaid ? '✅ Payment Received' : '⏳ Awaiting Payment'}</strong></label>
+                        </div>
+                        <button class="invoice-btn" onclick="generateInvoice('${firstName}', '${item.name}', '${dates}', ${item.sessions}, '${item.rateDisplay}', ${item.income.toFixed(2)})">Generate Invoice 📧</button>
+                    </div>
+                `;
             });
 
-            studentDropdown.innerHTML = '<option value="">Choose Student</option>';
-            studentsInMonth.forEach(item => {
-                studentDropdown.innerHTML += `<option value="${item.name}">${item.name}</option>`;
-            });
-        };
-
-        window.generateSelectedInvoice = () => {
-            const selectedMonth = document.getElementById('invoiceMonth').value;
-            const selectedStudent = document.getElementById('invoiceStudent').value;
-
-            if (!selectedMonth) {
-                showMsg('Please select a month! 📅');
-                return;
-            }
-
-            if (!selectedStudent) {
-                showMsg('Please select a student! 👤');
-                return;
-            }
-
-            const [year, month] = selectedMonth.split('-');
-            const y = parseInt(year), m = parseInt(month);
-            const s = students[selectedStudent];
-
-            const monthSessions = s.sessions.filter(dateStr => {
-                const sessionDate = new Date(dateStr);
-                return sessionDate.getFullYear() === y && sessionDate.getMonth() === m;
-            });
-
-            if (monthSessions.length === 0) {
-                showMsg('No sessions found for this month! 📋');
-                return;
-            }
-
-            let sessionIncome = 0;
-            if (s.rateType === 'hour') {
-                sessionIncome = monthSessions.length * (s.rate * s.hoursPerSession);
-            } else {
-                sessionIncome = monthSessions.length * s.rate;
-            }
-
-            const dates = monthSessions.map(dateStr => {
-                const d = new Date(dateStr);
-                return `${d.getDate()}/${d.getMonth() + 1}`;
-            }).join(', ');
-
-            const firstName = selectedStudent.split(' ')[0];
-            const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h)` : `$${s.rate}/session`;
-
-            const invoiceMessage = `Dear ${firstName}'s parents,
-
-${firstName} has attended classes on: ${dates}
-Total Sessions: ${monthSessions.length}
-Rate: ${rateDisplay}
-Total Amount Due: $${sessionIncome.toFixed(2)}
-
-Please transfer the fee through:
-• FPS
-• Payme
-• AlipayHK
-
-Thank you!`;
-
-            currentInvoiceText = invoiceMessage;
-            document.getElementById('invoiceMessageContainer').innerHTML = `<div class="invoice-text">${invoiceMessage}</div>`;
-            document.getElementById('invoiceModal').classList.add('show');
+            document.getElementById('invoiceContainer').innerHTML = invoiceHTML;
         };
 
         window.changeIncomeMonth = (dir) => {
@@ -1031,6 +920,26 @@ Thank you!`;
             await save();
             renderIncomeStatement();
             showMsg(`${name}'s payment status updated! ✓`);
+        };
+
+        window.generateInvoice = (firstName, fullName, dates, sessions, rate, total) => {
+            const invoiceMessage = `Dear ${firstName}'s parents,
+
+${firstName} has attended classes on: ${dates}
+Total Sessions: ${sessions}
+Rate: ${rate}
+Total Amount Due: $${total}
+
+Please transfer the fee through:
+• FPS
+• Payme
+• AlipayHK
+
+Thank you!`;
+
+            currentInvoiceText = invoiceMessage;
+            document.getElementById('invoiceMessageContainer').innerHTML = `<div class="invoice-text">${invoiceMessage}</div>`;
+            document.getElementById('invoiceModal').classList.add('show');
         };
 
         window.closeInvoiceModal = () => {
@@ -1114,4 +1023,26 @@ Thank you!`;
         }
 
         async function save() {
-            localStorage.set
+            localStorage.setItem('tutorData', JSON.stringify(students));
+            updateUI();
+            if(db) {
+                try { await setDoc(doc(db, 'tutor', 'master'), { students }); } 
+                catch(e) { console.error("Could not sync to cloud"); }
+            }
+        }
+
+        function showMsg(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m; 
+            t.className = "show";
+            setTimeout(() => t.className = "", 3000);
+        }
+
+        // Initialize App
+        renderCalendar();
+        updateSelectedDayDisplay();
+        renderMonthSchedule();
+        
+    </script>
+</body>
+</html>
