@@ -235,7 +235,6 @@
             <button class="tab-btn" onclick="openTab(event, 'addTab')">➕ Add Student</button>
         </div>
 
-        <!-- HOME TAB -->
         <div id="homeTab" class="tab-content active section">
             <h3>📅 Log Attendance - <span id="selectedDayDisplay">Today</span></h3>
             <div class="calendar-container">
@@ -258,7 +257,6 @@
             <button onclick="logAttendance()" style="background-color: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7;">Save Session 🌿</button>
         </div>
 
-        <!-- MONTH PLANNER TAB -->
         <div id="monthTab" class="tab-content section">
             <h3>📆 Month Planner</h3>
             <div class="schedule-header">
@@ -273,7 +271,6 @@
             </div>
         </div>
 
-        <!-- DIRECTORY TAB -->
         <div id="directoryTab" class="tab-content section">
             <h3>📋 Organized Directory</h3>
 
@@ -293,11 +290,9 @@
             </div>
 
             <div id="directoryContainer">
-                <!-- Students will populate here -->
-            </div>
+                </div>
         </div>
 
-        <!-- INCOME TAB -->
         <div id="incomeTab" class="tab-content section">
             <h3>💰 Monthly Income Statement</h3>
 
@@ -312,11 +307,11 @@
 
             <div class="income-summary">
                 <div class="summary-item">
-                    <strong>Total Sessions (Paid):</strong>
+                    <strong>Total Sessions:</strong>
                     <span id="totalSessions" style="font-size: 1.3rem; color: var(--pastel-purple);">0</span>
                 </div>
                 <div class="summary-item">
-                    <strong>Total Income (Paid):</strong>
+                    <strong>Total Income:</strong>
                     <span id="totalIncome" style="font-size: 1.3rem; color: var(--pastel-purple);">$0.00</span>
                 </div>
                 <div class="summary-item">
@@ -342,7 +337,6 @@
             <div id="invoiceContainer"></div>
         </div>
 
-        <!-- ADD STUDENT TAB -->
         <div id="addTab" class="tab-content section">
             <h3>📖 Add New Student</h3>
 
@@ -421,7 +415,6 @@
         </div>
     </div>
 
-    <!-- Invoice Modal -->
     <div id="invoiceModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -499,9 +492,6 @@
         };
 
         // --- CALENDAR LOGIC ---
-        window.updateSelectedAttendance = (name, isChecked) => {
-    selectedAttendance[name] = isChecked;
-};
         window.renderCalendar = () => {
             const grid = document.getElementById('calendarGrid');
             const display = document.getElementById('monthYearDisplay');
@@ -594,13 +584,15 @@
                 const s = students[name];
                 const dateStr = selectedDate.toDateString();
                 const isAttended = s.sessions && s.sessions.includes(dateStr);
-                selectedAttendance[name] = isAttended;
+                
+                // Keep selectedAttendance initialized just in case, but it's not strictly needed anymore
+                selectedAttendance[name] = isAttended; 
 
                 const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h)` : `$${s.rate}/session`;
 
                 cont.innerHTML += `
                     <div class="attendance-item">
-                        <input type="checkbox" id="check-${name}" ${isAttended ? 'checked' : ''} onchange="updateSelectedAttendance('${name}', this.checked)">
+                        <input type="checkbox" id="check-${name}" ${isAttended ? 'checked' : ''}>
                         <label for="check-${name}"><strong>${name}</strong> - ${s.schoolName} | ${s.studentGrade} | ${s.course} (${rateDisplay})</label>
                     </div>
                 `;
@@ -611,16 +603,29 @@
             const dateStr = selectedDate.toDateString();
             let saved = false;
 
-            Object.keys(selectedAttendance).forEach(name => {
-                if (!students[name].sessions) students[name].sessions = [];
+            // Find all the checkboxes currently on the screen
+            const checkboxes = document.querySelectorAll('#attendanceStudentsList input[type="checkbox"]');
 
-                const isCurrentlyChecked = selectedAttendance[name];
+            if (checkboxes.length === 0) {
+                showMsg('No students to save. ✓');
+                return;
+            }
+
+            // Go through each checkbox one by one
+            checkboxes.forEach(checkbox => {
+                // The ID is formatted as "check-StudentName", so we remove "check-" to get the name
+                const name = checkbox.id.replace('check-', '');
+                const isCurrentlyChecked = checkbox.checked;
+
+                if (!students[name].sessions) students[name].sessions = [];
                 const wasAttended = students[name].sessions.includes(dateStr);
 
+                // If checked on screen but not in database -> Add it
                 if (isCurrentlyChecked && !wasAttended) {
                     students[name].sessions.push(dateStr);
                     saved = true;
                 }
+                // If unchecked on screen but is in database -> Remove it
                 else if (!isCurrentlyChecked && wasAttended) {
                     const idx = students[name].sessions.indexOf(dateStr);
                     if (idx > -1) {
@@ -850,11 +855,9 @@
                         isPaid: isPaid
                     });
 
-                    // Only add to totals if PAID
-                    if (isPaid) {
-                        totalIncome += sessionIncome;
-                        totalSessions += monthSessions.length;
-                    }
+                    // Add to totals regardless of payment status
+                    totalIncome += sessionIncome;
+                    totalSessions += monthSessions.length;
                 }
             });
 
@@ -1048,4 +1051,4 @@ Thank you!`;
 
     </script>
 </body>
-</html>s
+</html>
