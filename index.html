@@ -139,8 +139,8 @@
         .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
         .month-day { border: 2px solid var(--pastel-blue); border-radius: 8px; padding: 8px; min-height: 80px; background: rgba(255,255,255,0.8); }
         .month-day-num { font-weight: 700; color: var(--pastel-purple); margin-bottom: 5px; font-size: 0.9rem; }
-        .month-class { background: var(--pastel-pink); border-radius: 4px; padding: 2px 4px; margin: 2px 0; font-size: 0.65rem; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .month-class.highlight { background: var(--pastel-purple); color: #fff; }
+        .month-class { background: var(--pastel-pink); border-radius: 4px; padding: 3px 6px; margin: 3px 0; font-size: 0.7rem; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .month-class.highlight { border: 2px solid white; }
 
         /* Directory UI */
         .search-bar { background: #fff; border: 2px solid var(--pastel-purple); box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
@@ -154,15 +154,18 @@
         .filter-checkbox:hover { background: var(--pastel-pink); }
 
         .day-header { font-family: 'Caveat', cursive; font-size: 2.2rem; color: var(--pastel-pink-dark); border-bottom: 3px dashed var(--pastel-pink); margin-top: 20px; margin-bottom: 10px; padding-bottom: 5px; }
-        .class-header { font-size: 1.1rem; font-weight: 700; color: #fff; background: var(--pastel-blue-dark); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-top: 10px; margin-bottom: 15px; }
+        .class-header { font-size: 1.1rem; font-weight: 700; color: var(--text-main); background: var(--pastel-blue); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-top: 10px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
         .directory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
 
         .student-card { background: rgba(255, 255, 255, 0.9); border: 2px dashed var(--pastel-pink-dark); border-radius: 12px; padding: 15px; font-size: 0.9rem; position: relative; }
-        .student-card h4 { margin: 0 0 10px 0; color: var(--pastel-purple); font-family: 'Caveat', cursive; font-size: 1.8rem; border-bottom: 1px solid #eee; padding-bottom: 5px; padding-right: 25px; }
+        .student-card h4 { margin: 0 0 10px 0; color: var(--pastel-purple); font-family: 'Caveat', cursive; font-size: 1.8rem; border-bottom: 1px solid #eee; padding-bottom: 5px; padding-right: 50px; }
         .student-card p { margin: 5px 0; line-height: 1.4; }
 
-        .delete-btn { position: absolute; top: 10px; right: 10px; background: #ffc2c2; color: #d14949; border-radius: 50%; width: 25px; height: 25px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 0px #e69c9c; padding: 0; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: #ffc2c2; color: #d14949; border-radius: 50%; width: 25px; height: 25px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 0px #e69c9c; padding: 0; display: flex; align-items: center; justify-content: center; margin: 0; border: none;}
         .delete-btn:active { transform: translateY(2px); box-shadow: 0 0px 0px #e69c9c; }
+        
+        .edit-btn { position: absolute; top: 10px; right: 40px; background: var(--pastel-blue); color: var(--text-main); border-radius: 50%; width: 25px; height: 25px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 0px var(--pastel-blue-dark); padding: 0; display: flex; align-items: center; justify-content: center; margin: 0; border: none;}
+        .edit-btn:active { transform: translateY(2px); box-shadow: 0 0px 0px var(--pastel-blue-dark); }
 
         /* Income Sheet */
         .income-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -174,10 +177,7 @@
         .summary-item strong { color: var(--pastel-purple); }
 
         .income-table { background: #fff; border-radius: 12px; overflow: hidden; border: 2px dashed var(--pastel-blue); margin-bottom: 20px; }
-        
-        /* UPDATED: Added space for the delete button column */
         .table-row { display: grid; grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 1.2fr 0.5fr; gap: 0; border-bottom: 1px dashed var(--pastel-blue); padding: 12px; align-items: center; }
-        
         .table-header { background: var(--pastel-blue); font-weight: 700; color: var(--text-main); }
         .table-row:hover { background: rgba(255,255,255,0.9); }
         .table-cell { padding: 0 8px; font-size: 0.85rem; }
@@ -297,7 +297,11 @@
         </div>
 
         <div id="incomeTab" class="tab-content section">
-            <h3>💰 Monthly Income Statement</h3>
+            <div class="income-header" style="flex-wrap: wrap; gap: 10px;">
+                <h3 style="margin: 0;">💰 Monthly Income Statement</h3>
+                
+                <button onclick="exportIncomeToCSV()" style="width: auto; background-color: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7; padding: 8px 15px; margin: 0; font-size: 0.95rem;">📥 Export to Sheets (CSV)</button>
+            </div>
 
             <div class="income-header">
                 <h3 style="margin: 0;">Income Summary</h3>
@@ -356,7 +360,7 @@
         </div>
 
         <div id="addTab" class="tab-content section">
-            <h3>📖 Add New Student</h3>
+            <h3 id="addStudentHeader">📖 Add New Student</h3>
 
             <div style="background: rgba(255,255,255,0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed var(--pastel-pink);">
                 <label>Student Name *</label>
@@ -429,7 +433,10 @@
                 </div>
             </div>
 
-            <button onclick="addStudent()">Save Student 💖</button>
+            <div style="display: flex; gap: 10px;">
+                <button id="saveStudentBtn" onclick="addStudent()">Save Student 💖</button>
+                <button id="cancelEditBtn" onclick="cancelEdit()" style="display: none; background: #e1e8ed; color: #5c4d4d; box-shadow: 0 4px 0 #cbd5e1;">Cancel Edit ✖</button>
+            </div>
         </div>
     </div>
 
@@ -447,7 +454,6 @@
     <div id="toast">Message here</div>
 
     <script type="module">
-        // --- FIREBASE IMPORT (Safe wrapper) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
@@ -462,7 +468,7 @@
             measurementId: "G-YJ0D0LGB9E"
         };
 
-        // --- DATA STATE ---
+        // --- DATA STATE & PALETTE ---
         let students = JSON.parse(localStorage.getItem('tutorData')) || {};
         const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         let currentDate = new Date();
@@ -472,11 +478,32 @@
         let incomeDate = new Date();
         let selectedFilters = { schools: [], grades: [], courses: [] };
         let currentInvoiceText = '';
-        
-        // UPDATED: Added Income Filter State
         let currentIncomeFilter = { status: 'all', course: 'all' };
+        let editingStudentName = null;
 
-        // --- FIREBASE INIT ---
+        // UPDATED: Pastel Palette Array and Auto-Color Function
+        const pastelPalette = [
+            '#ffadad', // Pastel Red
+            '#ffd6a5', // Pastel Orange
+            '#fdffb6', // Pastel Yellow
+            '#caffbf', // Pastel Green
+            '#9bf6ff', // Pastel Cyan
+            '#a0c4ff', // Pastel Blue
+            '#bdb2ff', // Pastel Purple
+            '#ffc6ff', // Pastel Pink
+            '#fbc4ab', // Pastel Peach
+            '#f8ad9d'  // Pastel Coral
+        ];
+
+        window.getCourseColor = (courseName) => {
+            if (!courseName) return pastelPalette[0];
+            let hash = 0;
+            for (let i = 0; i < courseName.length; i++) {
+                hash = courseName.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return pastelPalette[Math.abs(hash) % pastelPalette.length];
+        };
+
         let db;
         if (firebaseConfig.apiKey !== "PASTE_HERE") {
             try {
@@ -503,7 +530,9 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            e.currentTarget.classList.add('active');
+            
+            if(e && e.currentTarget) e.currentTarget.classList.add('active');
+            
             if(id === 'directoryTab') {
                 renderFilterOptions();
                 renderDirectory();
@@ -613,7 +642,7 @@
                 cont.innerHTML += `
                     <div class="attendance-item">
                         <input type="checkbox" id="check-${name}" ${isAttended ? 'checked' : ''}>
-                        <label for="check-${name}"><strong>${name}</strong> - ${s.schoolName} | ${s.studentGrade} | ${s.course} (${rateDisplay})</label>
+                        <label for="check-${name}"><strong>${name}</strong> - ${s.schoolName} | ${s.studentGrade} | <span style="background:${getCourseColor(s.course)}; padding: 2px 6px; border-radius: 6px;">${s.course}</span> (${rateDisplay})</label>
                     </div>
                 `;
             });
@@ -703,7 +732,9 @@
 
                 for (let course in classesMap) {
                     const count = classesMap[course];
-                    dayHTML += `<div class="month-class" ${isToday ? 'style="background: rgba(255,255,255,0.2);"' : ''}>${course} (${count})</div>`;
+                    // UPDATED: Use dynamic course color
+                    const cColor = getCourseColor(course);
+                    dayHTML += `<div class="month-class" style="background: ${cColor};">${course} (${count})</div>`;
                 }
 
                 dayHTML += `</div>`;
@@ -797,7 +828,9 @@
                     });
 
                     for (let cName in courses) {
-                        cont.innerHTML += `<div class="class-header">🏫 Course: ${cName}</div>`;
+                        // UPDATED: Apply auto course colors to directory headers
+                        const cColor = getCourseColor(cName);
+                        cont.innerHTML += `<div class="class-header" style="background: ${cColor};">🏫 Course: ${cName}</div>`;
 
                         let gridHTML = `<div class="directory-grid">`;
                         courses[cName].forEach(name => {
@@ -807,6 +840,7 @@
                             gridHTML += `
                                 <div class="student-card">
                                     <button class="delete-btn" onclick="deleteStudent('${name}')" title="Delete">✖</button>
+                                    <button class="edit-btn" onclick="editStudent('${name}')" title="Edit Student Details">✏️</button>
                                     <h4>${name}</h4>
                                     <p>🏫 <strong>School:</strong> ${s.schoolName || 'N/A'}</p>
                                     <p>📚 <strong>Grade:</strong> ${s.studentGrade || 'N/A'}</p>
@@ -831,7 +865,60 @@
         };
 
         // --- INCOME LOGIC ---
-        // UPDATED: Added Income Filtering Logic and Delete Function
+        window.exportIncomeToCSV = () => {
+            const y = incomeDate.getFullYear(), m = incomeDate.getMonth();
+            let csvContent = "Student,School,Grade,Course,Sessions Logged,Rate,Total Income ($),Payment Status,Dates Logged\n";
+
+            Object.keys(students).forEach(name => {
+                const s = students[name];
+                if (!s.sessions) return;
+                
+                const monthSessions = s.sessions.filter(dateStr => {
+                    const sessionDate = new Date(dateStr);
+                    return sessionDate.getFullYear() === y && sessionDate.getMonth() === m;
+                });
+
+                if (monthSessions.length > 0) {
+                    let sessionIncome = 0;
+                    if (s.rateType === 'hour') {
+                        sessionIncome = monthSessions.length * (s.rate * s.hoursPerSession);
+                    } else {
+                        sessionIncome = monthSessions.length * s.rate;
+                    }
+
+                    const isPaid = s.paid && s.paid[`${y}-${m}`] ? 'Paid' : 'Pending';
+                    const dates = monthSessions.map(d => new Date(d).toLocaleDateString()).join('; ');
+                    const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h` : `$${s.rate}/session`;
+                    
+                    const row = [
+                        `"${name}"`,
+                        `"${s.schoolName || ''}"`,
+                        `"${s.studentGrade || ''}"`,
+                        `"${s.course || ''}"`,
+                        monthSessions.length,
+                        `"${rateDisplay}"`,
+                        sessionIncome.toFixed(2),
+                        isPaid,
+                        `"${dates}"`
+                    ].join(",");
+                    
+                    csvContent += row + "\n";
+                }
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Tutor_Income_${y}_${m+1}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showMsg("CSV Downloaded! You can open this file natively in Google Sheets. 📊");
+        };
+
         window.applyIncomeFilter = () => {
             currentIncomeFilter.status = document.getElementById('incomeStatusFilter').value;
             currentIncomeFilter.course = document.getElementById('incomeCourseFilter').value;
@@ -904,7 +991,6 @@
             document.getElementById('totalIncome').innerText = `$${totalIncome.toFixed(2)}`;
             document.getElementById('avgPerSession').innerText = totalSessions > 0 ? `$${(totalIncome / totalSessions).toFixed(2)}` : '$0.00';
 
-            // UPDATED: Populate dynamic Course Filter
             const courses = new Set(incomeData.map(item => item.course));
             const courseSelect = document.getElementById('incomeCourseFilter');
             const currentCourseSelection = courseSelect.value;
@@ -912,7 +998,6 @@
                 Array.from(courses).map(c => `<option value="${c}">${c}</option>`).join('');
             courseSelect.value = courses.has(currentCourseSelection) ? currentCourseSelection : 'all';
 
-            // UPDATED: Apply the filters to our data
             const filteredData = incomeData.filter(item => {
                 const matchStatus = currentIncomeFilter.status === 'all' || 
                                     (currentIncomeFilter.status === 'paid' && item.isPaid) ||
@@ -921,15 +1006,18 @@
                 return matchStatus && matchCourse;
             });
 
-            // UPDATED: Render Table Rows with Delete Button
             let tableHTML = '';
             filteredData.sort((a, b) => b.income - a.income).forEach(item => {
                 const paidCheckId = `paid-${item.name}-${y}-${m}`;
                 const paidStatus = item.isPaid ? '✅ Paid' : '⏳ Pending';
+                
+                // UPDATED: Apply auto course colors to Income tags
+                const cColor = getCourseColor(item.course);
+
                 tableHTML += `
                     <div class="table-row">
                         <div class="table-cell"><strong>${item.name}</strong></div>
-                        <div class="table-cell">${item.course}</div>
+                        <div class="table-cell"><span style="background: ${cColor}; padding: 3px 8px; border-radius: 12px; font-weight: 600; font-size: 0.75rem;">${item.course}</span></div>
                         <div class="table-cell">${item.sessions}</div>
                         <div class="table-cell">${item.rateDisplay}</div>
                         <div class="table-cell"><strong>$${item.income.toFixed(2)}</strong></div>
@@ -946,7 +1034,6 @@
 
             document.getElementById('incomeTableBody').innerHTML = tableHTML;
 
-            // Render invoice section
             let invoiceHTML = '';
             filteredData.forEach(item => {
                 const dates = item.monthSessions.map(dateStr => {
@@ -958,7 +1045,7 @@
                 invoiceHTML += `
                     <div class="invoice-card" style="border-color: ${item.isPaid ? '#b7e4c7' : '#ffafcc'}; background: ${item.isPaid ? 'rgba(216, 243, 220, 0.3)' : 'rgba(255, 248, 245, 0.8)'};">
                         <h4>👤 ${item.name} (${item.school} - ${item.grade})</h4>
-                        <p><strong>Course:</strong> ${item.course}</p>
+                        <p><strong>Course:</strong> <span style="background: ${getCourseColor(item.course)}; padding: 2px 6px; border-radius: 8px;">${item.course}</span></p>
                         <p><strong>Sessions:</strong> ${item.sessions} (${dates})</p>
                         <p><strong>Rate:</strong> ${item.rateDisplay}</p>
                         <p><strong>Total Amount:</strong> $${item.income.toFixed(2)}</p>
@@ -1018,6 +1105,59 @@
         };
 
         // --- DATA LOGIC ---
+        window.editStudent = (name) => {
+            const s = students[name];
+            
+            document.getElementById('studentName').value = name;
+            document.getElementById('schoolName').value = s.schoolName || '';
+            document.getElementById('studentGrade').value = s.studentGrade || '';
+            document.getElementById('courseName').value = s.course || '';
+            document.getElementById('phone').value = s.phone || '';
+            document.getElementById('socials').value = s.socials || '';
+            document.getElementById('dayOfWeek').value = s.day || 'Monday';
+            document.getElementById('classTimeStart').value = s.timeStart || '';
+            document.getElementById('classTimeEnd').value = s.timeEnd || '';
+            
+            if (s.rateType === 'hour') {
+                document.getElementById('rateHour').checked = true;
+                document.getElementById('hoursPerSession').value = s.hoursPerSession || '';
+            } else {
+                document.getElementById('rateSession').checked = true;
+            }
+            toggleHoursInput();
+            document.getElementById('rate').value = s.rate || '';
+
+            editingStudentName = name;
+            document.getElementById('addStudentHeader').innerText = `✏️ Edit Student: ${name}`;
+            document.getElementById('saveStudentBtn').innerText = 'Update Student 💖';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+
+            const allTabs = document.querySelectorAll('.tab-btn');
+            openTab({ currentTarget: allTabs[4] }, 'addTab');
+        };
+
+        window.cancelEdit = () => {
+            editingStudentName = null;
+            document.getElementById('addStudentHeader').innerText = `📖 Add New Student`;
+            document.getElementById('saveStudentBtn').innerText = 'Save Student 💖';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+
+            document.getElementById('studentName').value = '';
+            document.getElementById('schoolName').value = '';
+            document.getElementById('studentGrade').value = '';
+            document.getElementById('courseName').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('socials').value = '';
+            document.getElementById('classTimeStart').value = '';
+            document.getElementById('classTimeEnd').value = '';
+            document.getElementById('rate').value = '';
+            document.getElementById('hoursPerSession').value = '';
+            document.getElementById('rateSession').checked = true;
+            document.getElementById('hoursInput').classList.remove('show');
+
+            showMsg('Edit cancelled ✖');
+        };
+
         window.addStudent = async () => {
             const name = document.getElementById('studentName').value.trim();
             const schoolName = document.getElementById('schoolName').value.trim();
@@ -1039,28 +1179,32 @@
             if(!rate) return showMsg("Please enter a rate! 💰");
             if(rateType === 'hour' && !hoursPerSession) return showMsg("Please enter hours per session! ⏰");
 
+            let existingSessions = [];
+            let existingPaid = {};
+
+            if (editingStudentName && students[editingStudentName]) {
+                existingSessions = students[editingStudentName].sessions || [];
+                existingPaid = students[editingStudentName].paid || {};
+                
+                if (name !== editingStudentName) {
+                    delete students[editingStudentName];
+                }
+            } else if (students[name]) {
+                existingSessions = students[name].sessions || [];
+                existingPaid = students[name].paid || {};
+            }
+
             students[name] = {
                 schoolName, studentGrade, course, phone, socials, day, timeStart, timeEnd, rateType, rate,
                 hoursPerSession: rateType === 'hour' ? hoursPerSession : null,
-                sessions: students[name] ? students[name].sessions : [],
-                paid: students[name] && students[name].paid ? students[name].paid : {}
+                sessions: existingSessions,
+                paid: existingPaid
             };
 
             await save();
-            showMsg(`Successfully added ${name}! 💖`);
+            showMsg(editingStudentName ? `Successfully updated ${name}! 💖` : `Successfully added ${name}! 💖`);
 
-            document.getElementById('studentName').value = '';
-            document.getElementById('schoolName').value = '';
-            document.getElementById('studentGrade').value = '';
-            document.getElementById('courseName').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('socials').value = '';
-            document.getElementById('classTimeStart').value = '';
-            document.getElementById('classTimeEnd').value = '';
-            document.getElementById('rate').value = '';
-            document.getElementById('hoursPerSession').value = '';
-            document.getElementById('rateSession').checked = true;
-            document.getElementById('hoursInput').classList.remove('show');
+            cancelEdit();
         };
 
         window.deleteStudent = async (name) => {
