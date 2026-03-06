@@ -481,18 +481,15 @@
         let currentIncomeFilter = { status: 'all', course: 'all' };
         let editingStudentName = null;
 
-        // UPDATED: Pastel Palette Array and Auto-Color Function
+        // UPDATED: User's elegant custom pastel palette
         const pastelPalette = [
-            '#ffadad', // Pastel Red
-            '#ffd6a5', // Pastel Orange
-            '#fdffb6', // Pastel Yellow
-            '#caffbf', // Pastel Green
-            '#9bf6ff', // Pastel Cyan
-            '#a0c4ff', // Pastel Blue
-            '#bdb2ff', // Pastel Purple
-            '#ffc6ff', // Pastel Pink
-            '#fbc4ab', // Pastel Peach
-            '#f8ad9d'  // Pastel Coral
+            '#D6B1BB', 
+            '#9EBDB8', 
+            '#CFDBE7', 
+            '#E0DABA', 
+            '#C6C5DD', 
+            '#EEE3DF', 
+            '#9CABC8'
         ];
 
         window.getCourseColor = (courseName) => {
@@ -732,7 +729,6 @@
 
                 for (let course in classesMap) {
                     const count = classesMap[course];
-                    // UPDATED: Use dynamic course color
                     const cColor = getCourseColor(course);
                     dayHTML += `<div class="month-class" style="background: ${cColor};">${course} (${count})</div>`;
                 }
@@ -828,7 +824,6 @@
                     });
 
                     for (let cName in courses) {
-                        // UPDATED: Apply auto course colors to directory headers
                         const cColor = getCourseColor(cName);
                         cont.innerHTML += `<div class="class-header" style="background: ${cColor};">🏫 Course: ${cName}</div>`;
 
@@ -1011,13 +1006,12 @@
                 const paidCheckId = `paid-${item.name}-${y}-${m}`;
                 const paidStatus = item.isPaid ? '✅ Paid' : '⏳ Pending';
                 
-                // UPDATED: Apply auto course colors to Income tags
                 const cColor = getCourseColor(item.course);
 
                 tableHTML += `
                     <div class="table-row">
                         <div class="table-cell"><strong>${item.name}</strong></div>
-                        <div class="table-cell"><span style="background: ${cColor}; padding: 3px 8px; border-radius: 12px; font-weight: 600; font-size: 0.75rem;">${item.course}</span></div>
+                        <div class="table-cell"><span style="background: ${cColor}; padding: 3px 8px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; color: #5c4d4d;">${item.course}</span></div>
                         <div class="table-cell">${item.sessions}</div>
                         <div class="table-cell">${item.rateDisplay}</div>
                         <div class="table-cell"><strong>$${item.income.toFixed(2)}</strong></div>
@@ -1045,7 +1039,7 @@
                 invoiceHTML += `
                     <div class="invoice-card" style="border-color: ${item.isPaid ? '#b7e4c7' : '#ffafcc'}; background: ${item.isPaid ? 'rgba(216, 243, 220, 0.3)' : 'rgba(255, 248, 245, 0.8)'};">
                         <h4>👤 ${item.name} (${item.school} - ${item.grade})</h4>
-                        <p><strong>Course:</strong> <span style="background: ${getCourseColor(item.course)}; padding: 2px 6px; border-radius: 8px;">${item.course}</span></p>
+                        <p><strong>Course:</strong> <span style="background: ${getCourseColor(item.course)}; padding: 2px 6px; border-radius: 8px; color: #5c4d4d;">${item.course}</span></p>
                         <p><strong>Sessions:</strong> ${item.sessions} (${dates})</p>
                         <p><strong>Rate:</strong> ${item.rateDisplay}</p>
                         <p><strong>Total Amount:</strong> $${item.income.toFixed(2)}</p>
