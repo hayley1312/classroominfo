@@ -139,7 +139,10 @@
         .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
         .month-day { border: 2px solid var(--pastel-blue); border-radius: 8px; padding: 8px; min-height: 80px; background: rgba(255,255,255,0.8); }
         .month-day-num { font-weight: 700; color: var(--pastel-purple); margin-bottom: 5px; font-size: 0.9rem; }
-        .month-class { background: var(--pastel-pink); border-radius: 4px; padding: 3px 6px; margin: 3px 0; font-size: 0.7rem; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+
+        /* UPDATED: Added cursor pointer and hover effect to classes */
+        .month-class { cursor: pointer; background: var(--pastel-pink); border-radius: 4px; padding: 3px 6px; margin: 3px 0; font-size: 0.75rem; color: #5c4d4d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+        .month-class:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 10; position: relative;}
         .month-class.highlight { border: 2px solid white; }
 
         /* Directory UI */
@@ -163,7 +166,7 @@
 
         .delete-btn { position: absolute; top: 10px; right: 10px; background: #ffc2c2; color: #d14949; border-radius: 50%; width: 25px; height: 25px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 0px #e69c9c; padding: 0; display: flex; align-items: center; justify-content: center; margin: 0; border: none;}
         .delete-btn:active { transform: translateY(2px); box-shadow: 0 0px 0px #e69c9c; }
-        
+
         .edit-btn { position: absolute; top: 10px; right: 40px; background: var(--pastel-blue); color: var(--text-main); border-radius: 50%; width: 25px; height: 25px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 0px var(--pastel-blue-dark); padding: 0; display: flex; align-items: center; justify-content: center; margin: 0; border: none;}
         .edit-btn:active { transform: translateY(2px); box-shadow: 0 0px 0px var(--pastel-blue-dark); }
 
@@ -197,28 +200,89 @@
         #toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; border: 3px solid var(--pastel-pink-dark); padding: 15px; border-radius: 15px; z-index: 100; font-weight: bold; transition: opacity 0.3s; opacity: 0;}
         #toast.show { visibility: visible; opacity: 1; }
 
-        /* Attendance Checkbox */
-        .attendance-item { display: flex; align-items: center; padding: 10px; background: rgba(255,255,255,0.5); border-radius: 8px; margin-bottom: 10px; }
-        .attendance-item input[type="checkbox"] { margin-right: 10px; width: 18px; height: 18px; cursor: pointer; }
-        .attendance-item label { margin: 0; flex: 1; cursor: pointer; }
-
-        /* Rate Options */
-        .rate-option-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        .rate-option { flex: 1; }
-        .rate-option input[type="radio"] { margin-right: 5px; }
-        .rate-option label { display: inline; margin-bottom: 0; }
-        .hours-input { display: none; }
-        .hours-input.show { display: block; }
-
-        /* Modal for Invoice */
+        /* Modals */
         .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
         .modal.show { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: var(--paper-color); border: 3px solid var(--pastel-purple); border-radius: 15px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-content { background: var(--paper-color); border: 3px solid var(--pastel-purple); border-radius: 15px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative;}
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-header h2 { margin: 0; color: var(--pastel-purple); }
-        .modal-close { background: #ffc2c2; color: #d14949; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1.2rem; padding: 0; }
+        .modal-close { background: #ffc2c2; color: #d14949; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1.2rem; padding: 0; z-index: 10;}
         .invoice-text { background: rgba(255,255,255,0.9); border: 2px dashed var(--pastel-blue); border-radius: 8px; padding: 15px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
         .copy-btn { background: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7; }
+
+        /* UPDATED: Notepad Styling for Lesson Notes */
+        .notepad-container {
+            background-color: #fffaf0;
+            background-image: linear-gradient(#e1e8ed 1px, transparent 1px);
+            background-size: 100% 2.5em; /* Lined paper spacing */
+            border-left: 2px solid var(--margin-line);
+            padding: 2em 2em 2em 3em;
+            border-radius: 5px 15px 15px 5px;
+            box-shadow: 5px 5px 25px rgba(0,0,0,0.15);
+            font-family: 'Nunito', sans-serif;
+            position: relative;
+            line-height: 2.5em;
+        }
+
+        .notepad-container::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 10px; width: 15px;
+            background-image: radial-gradient(circle, var(--bg-color) 4px, transparent 5px);
+            background-size: 100% 3em;
+            background-repeat: repeat-y;
+        }
+
+        .notepad-title { font-family: 'Caveat', cursive; font-size: 2.5rem; color: var(--pastel-purple); margin-bottom: 5px; line-height: 1; text-align: center; }
+
+        .notepad-header-info { display: flex; justify-content: space-between; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px; margin-bottom: 10px; font-weight: 700; color: var(--text-main); font-size: 0.9rem; line-height: 1.5; flex-wrap: wrap; gap: 10px;}
+
+        .lined-input {
+            background: transparent;
+            border: none;
+            font-family: 'Caveat', cursive;
+            color: var(--pastel-purple);
+            font-size: 1.5rem;
+            width: 100%;
+            outline: none;
+            padding: 0;
+            margin: 0;
+            height: 2.5em; /* matches background grid */
+        }
+
+        .lined-textarea {
+            background: transparent;
+            border: none;
+            width: 100%;
+            min-height: 200px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            line-height: 2.5em; /* Crucial: aligns text with background lines */
+            outline: none;
+            resize: vertical;
+            padding: 0;
+            margin-top: 5px;
+            color: var(--text-main);
+        }
+
+        .student-check-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 15px;
+            line-height: 1.5;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .student-check-list div {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.6);
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--pastel-blue);
+        }
+
     </style>
 </head>
 <body>
@@ -272,6 +336,7 @@
             <div class="month-schedule">
                 <div class="month-grid" id="monthGrid"></div>
             </div>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--pastel-purple); margin-top: -10px;">💡 Tip: Click on any class above to open its Lesson Notepad!</p>
         </div>
 
         <div id="directoryTab" class="tab-content section">
@@ -299,7 +364,7 @@
         <div id="incomeTab" class="tab-content section">
             <div class="income-header" style="flex-wrap: wrap; gap: 10px;">
                 <h3 style="margin: 0;">💰 Monthly Income Statement</h3>
-                
+
                 <button onclick="exportIncomeToCSV()" style="width: auto; background-color: var(--pastel-green); box-shadow: 0 4px 0 #b7e4c7; padding: 8px 15px; margin: 0; font-size: 0.95rem;">📥 Export to Sheets (CSV)</button>
             </div>
 
@@ -329,7 +394,7 @@
 
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px; margin-bottom: 15px;">
                 <h4 style="color: var(--pastel-purple); margin: 0;">📊 Student Payment Tracking</h4>
-                
+
                 <div style="display: flex; gap: 10px;">
                     <select id="incomeStatusFilter" onchange="applyIncomeFilter()" style="margin: 0; padding: 5px; width: auto; font-size: 0.85rem;">
                         <option value="all">All Statuses</option>
@@ -451,6 +516,37 @@
         </div>
     </div>
 
+    <div id="lessonNoteModal" class="modal">
+        <div class="modal-content" style="background: transparent; border: none; box-shadow: none; max-width: 700px;">
+            <div class="notepad-container">
+                <button class="modal-close" onclick="closeLessonNoteModal()" style="position: absolute; right: 20px; top: 20px;">✕</button>
+
+                <div class="notepad-title">Lesson Notes</div>
+
+                <div class="notepad-header-info">
+                    <div id="noteDateDisplay">📅 Date: </div>
+                    <div id="noteTimeDisplay">⏰ Time: </div>
+                    <div id="noteCourseDisplay" style="background: var(--pastel-blue); padding: 2px 10px; border-radius: 12px; color: #fff;">📖 Course: </div>
+                </div>
+
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                    <label style="color: var(--pastel-purple); font-size: 1.1rem; white-space: nowrap; margin:0;">Month Theme:</label>
+                    <input type="text" id="noteTheme" class="lined-input" placeholder="e.g. Mastering Fractions...">
+                </div>
+
+                <div style="margin-top: 15px; margin-bottom: 5px; line-height: 1.5;">
+                    <label style="color: var(--pastel-purple); font-size: 1.1rem; margin:0;">Class Attendance:</label>
+                    <div id="noteStudents" class="student-check-list"></div>
+                </div>
+
+                <label style="color: var(--pastel-purple); font-size: 1.1rem; margin-top: 15px;">Daily Progress & Notes:</label>
+                <textarea id="noteContent" class="lined-textarea" placeholder="Write down progress, homework assigned, topics covered..."></textarea>
+
+                <button onclick="saveLessonNote()" style="margin-top: 20px; box-shadow: 0 4px 0 var(--pastel-pink-dark);">Save to Notepad 🌿</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast">Message here</div>
 
     <script type="module">
@@ -470,6 +566,11 @@
 
         // --- DATA STATE & PALETTE ---
         let students = JSON.parse(localStorage.getItem('tutorData')) || {};
+
+        // UPDATED: New state variables for Themes and Notes
+        let monthThemes = JSON.parse(localStorage.getItem('tutorThemes')) || {};
+        let lessonNotes = JSON.parse(localStorage.getItem('tutorLessonNotes')) || {};
+
         const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         let currentDate = new Date();
         let selectedDate = new Date();
@@ -480,15 +581,16 @@
         let currentInvoiceText = '';
         let currentIncomeFilter = { status: 'all', course: 'all' };
         let editingStudentName = null;
+        let currentEditingNote = null; // Tracks which note is open
 
-        // UPDATED: User's elegant custom pastel palette
+        // User's elegant custom pastel palette
         const pastelPalette = [
-            '#D6B1BB', 
-            '#9EBDB8', 
-            '#CFDBE7', 
-            '#E0DABA', 
-            '#C6C5DD', 
-            '#EEE3DF', 
+            '#D6B1BB',
+            '#9EBDB8',
+            '#CFDBE7',
+            '#E0DABA',
+            '#C6C5DD',
+            '#EEE3DF',
             '#9CABC8'
         ];
 
@@ -511,7 +613,11 @@
 
                 onSnapshot(doc(db, 'tutor', 'master'), (snap) => {
                     if (snap.exists()) {
-                        students = snap.data().students;
+                        const data = snap.data();
+                        if(data.students) students = data.students;
+                        if(data.monthThemes) monthThemes = data.monthThemes;
+                        if(data.lessonNotes) lessonNotes = data.lessonNotes;
+
                         updateUI();
                         if(document.getElementById('directoryTab').classList.contains('active')) {
                             renderFilterOptions();
@@ -527,9 +633,9 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
+
             if(e && e.currentTarget) e.currentTarget.classList.add('active');
-            
+
             if(id === 'directoryTab') {
                 renderFilterOptions();
                 renderDirectory();
@@ -631,15 +737,15 @@
                 const s = students[name];
                 const dateStr = selectedDate.toDateString();
                 const isAttended = s.sessions && s.sessions.includes(dateStr);
-                
-                selectedAttendance[name] = isAttended; 
+
+                selectedAttendance[name] = isAttended;
 
                 const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h)` : `$${s.rate}/session`;
 
                 cont.innerHTML += `
                     <div class="attendance-item">
                         <input type="checkbox" id="check-${name}" ${isAttended ? 'checked' : ''}>
-                        <label for="check-${name}"><strong>${name}</strong> - ${s.schoolName} | ${s.studentGrade} | <span style="background:${getCourseColor(s.course)}; padding: 2px 6px; border-radius: 6px;">${s.course}</span> (${rateDisplay})</label>
+                        <label for="check-${name}"><strong>${name}</strong> - ${s.schoolName} | ${s.studentGrade} | <span style="background:${getCourseColor(s.course)}; padding: 2px 6px; border-radius: 6px; color:#5c4d4d; font-weight:700;">${s.course}</span> (${rateDisplay})</label>
                     </div>
                 `;
             });
@@ -730,7 +836,8 @@
                 for (let course in classesMap) {
                     const count = classesMap[course];
                     const cColor = getCourseColor(course);
-                    dayHTML += `<div class="month-class" style="background: ${cColor};">${course} (${count})</div>`;
+                    // UPDATED: Added click event to open Notepad Modal
+                    dayHTML += `<div class="month-class" style="background: ${cColor};" onclick="openLessonNote('${course}', ${y}, ${m}, ${i}, '${dayName}')">${course} (${count})</div>`;
                 }
 
                 dayHTML += `</div>`;
@@ -741,6 +848,96 @@
         window.changeMonthPlan = (dir) => {
             monthPlanDate.setMonth(monthPlanDate.getMonth() + dir);
             renderMonthSchedule();
+        };
+
+        // --- LESSON NOTES LOGIC (NEW) ---
+        window.openLessonNote = (course, year, month, day, dayName) => {
+            const dateObj = new Date(year, month, day);
+            const dateStr = dateObj.toDateString();
+            const displayDateStr = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+
+            // Unique keys for saving
+            const themeKey = `${course}-${year}-${month}`; // Theme is shared across the whole month
+            const noteKey = `${course}-${dateStr}`; // Notes are specific to the day
+
+            currentEditingNote = { course, year, month, day, dateStr, themeKey, noteKey, dayName };
+
+            // Get course info and students
+            const courseStudents = Object.keys(students).filter(name => students[name].course === course && students[name].day === dayName);
+
+            let timeStr = "TBD";
+            if(courseStudents.length > 0) {
+                timeStr = `${students[courseStudents[0]].timeStart || ''} - ${students[courseStudents[0]].timeEnd || ''}`;
+            }
+
+            // Populate Header Info
+            document.getElementById('noteCourseDisplay').innerText = `📖 Course: ${course}`;
+            document.getElementById('noteCourseDisplay').style.background = getCourseColor(course);
+            document.getElementById('noteDateDisplay').innerText = `📅 Date: ${displayDateStr}`;
+            document.getElementById('noteTimeDisplay').innerText = `⏰ Time: ${timeStr}`;
+
+            // Populate Theme
+            document.getElementById('noteTheme').value = monthThemes[themeKey] || '';
+
+            // Populate Students & Checkboxes
+            let studentsHTML = '';
+            courseStudents.forEach(name => {
+                const isAttended = students[name].sessions && students[name].sessions.includes(dateStr);
+                studentsHTML += `
+                    <div>
+                        <input type="checkbox" id="note-att-${name}" ${isAttended ? 'checked' : ''} style="margin: 0 10px 0 0; width: 16px; height: 16px; cursor: pointer;">
+                        <label for="note-att-${name}" style="margin: 0; cursor: pointer; color: var(--text-main); font-weight: 600;">${name}</label>
+                    </div>
+                `;
+            });
+            document.getElementById('noteStudents').innerHTML = studentsHTML || '<div style="background: transparent; border: none; font-style: italic;">No students found for this day.</div>';
+
+            // Populate Daily Note Content
+            document.getElementById('noteContent').value = lessonNotes[noteKey] || '';
+
+            // Open Modal
+            document.getElementById('lessonNoteModal').classList.add('show');
+        };
+
+        window.closeLessonNoteModal = () => {
+            document.getElementById('lessonNoteModal').classList.remove('show');
+            currentEditingNote = null;
+        };
+
+        window.saveLessonNote = async () => {
+            if (!currentEditingNote) return;
+            const { themeKey, noteKey, dateStr, course, dayName } = currentEditingNote;
+
+            // Save Texts
+            monthThemes[themeKey] = document.getElementById('noteTheme').value;
+            lessonNotes[noteKey] = document.getElementById('noteContent').value;
+
+            // Sync Attendance Checkboxes with main database
+            const courseStudents = Object.keys(students).filter(name => students[name].course === course && students[name].day === dayName);
+
+            courseStudents.forEach(name => {
+                const checkbox = document.getElementById(`note-att-${name}`);
+                if(checkbox) {
+                    const isChecked = checkbox.checked;
+                    if (!students[name].sessions) students[name].sessions = [];
+                    const wasAttended = students[name].sessions.includes(dateStr);
+
+                    if (isChecked && !wasAttended) {
+                        students[name].sessions.push(dateStr);
+                    } else if (!isChecked && wasAttended) {
+                        const idx = students[name].sessions.indexOf(dateStr);
+                        if (idx > -1) students[name].sessions.splice(idx, 1);
+                    }
+                }
+            });
+
+            await save();
+
+            // Update UI to reflect any changes in attendance across tabs
+            updateAttendanceStudents();
+
+            closeLessonNoteModal();
+            showMsg('Lesson Notes & Attendance saved successfully! 📓🌿');
         };
 
         // --- DIRECTORY FILTERS ---
@@ -867,7 +1064,7 @@
             Object.keys(students).forEach(name => {
                 const s = students[name];
                 if (!s.sessions) return;
-                
+
                 const monthSessions = s.sessions.filter(dateStr => {
                     const sessionDate = new Date(dateStr);
                     return sessionDate.getFullYear() === y && sessionDate.getMonth() === m;
@@ -884,7 +1081,7 @@
                     const isPaid = s.paid && s.paid[`${y}-${m}`] ? 'Paid' : 'Pending';
                     const dates = monthSessions.map(d => new Date(d).toLocaleDateString()).join('; ');
                     const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h` : `$${s.rate}/session`;
-                    
+
                     const row = [
                         `"${name}"`,
                         `"${s.schoolName || ''}"`,
@@ -896,7 +1093,7 @@
                         isPaid,
                         `"${dates}"`
                     ].join(",");
-                    
+
                     csvContent += row + "\n";
                 }
             });
@@ -910,7 +1107,7 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
+
             showMsg("CSV Downloaded! You can open this file natively in Google Sheets. 📊");
         };
 
@@ -926,7 +1123,7 @@
                     const d = new Date(dateStr);
                     return !(d.getFullYear() === year && d.getMonth() === month);
                 });
-                
+
                 const key = `${year}-${month}`;
                 if (students[name].paid && students[name].paid[key]) {
                     delete students[name].paid[key];
@@ -989,12 +1186,12 @@
             const courses = new Set(incomeData.map(item => item.course));
             const courseSelect = document.getElementById('incomeCourseFilter');
             const currentCourseSelection = courseSelect.value;
-            courseSelect.innerHTML = '<option value="all">All Courses</option>' + 
+            courseSelect.innerHTML = '<option value="all">All Courses</option>' +
                 Array.from(courses).map(c => `<option value="${c}">${c}</option>`).join('');
             courseSelect.value = courses.has(currentCourseSelection) ? currentCourseSelection : 'all';
 
             const filteredData = incomeData.filter(item => {
-                const matchStatus = currentIncomeFilter.status === 'all' || 
+                const matchStatus = currentIncomeFilter.status === 'all' ||
                                     (currentIncomeFilter.status === 'paid' && item.isPaid) ||
                                     (currentIncomeFilter.status === 'pending' && !item.isPaid);
                 const matchCourse = currentIncomeFilter.course === 'all' || item.course === currentIncomeFilter.course;
@@ -1005,7 +1202,7 @@
             filteredData.sort((a, b) => b.income - a.income).forEach(item => {
                 const paidCheckId = `paid-${item.name}-${y}-${m}`;
                 const paidStatus = item.isPaid ? '✅ Paid' : '⏳ Pending';
-                
+
                 const cColor = getCourseColor(item.course);
 
                 tableHTML += `
@@ -1101,7 +1298,7 @@
         // --- DATA LOGIC ---
         window.editStudent = (name) => {
             const s = students[name];
-            
+
             document.getElementById('studentName').value = name;
             document.getElementById('schoolName').value = s.schoolName || '';
             document.getElementById('studentGrade').value = s.studentGrade || '';
@@ -1111,7 +1308,7 @@
             document.getElementById('dayOfWeek').value = s.day || 'Monday';
             document.getElementById('classTimeStart').value = s.timeStart || '';
             document.getElementById('classTimeEnd').value = s.timeEnd || '';
-            
+
             if (s.rateType === 'hour') {
                 document.getElementById('rateHour').checked = true;
                 document.getElementById('hoursPerSession').value = s.hoursPerSession || '';
@@ -1179,7 +1376,7 @@
             if (editingStudentName && students[editingStudentName]) {
                 existingSessions = students[editingStudentName].sessions || [];
                 existingPaid = students[editingStudentName].paid || {};
-                
+
                 if (name !== editingStudentName) {
                     delete students[editingStudentName];
                 }
@@ -1214,11 +1411,21 @@
             updateAttendanceClass();
         }
 
+        // UPDATED: Now saves themes and notes to LocalStorage & Firebase!
         async function save() {
             localStorage.setItem('tutorData', JSON.stringify(students));
+            localStorage.setItem('tutorThemes', JSON.stringify(monthThemes));
+            localStorage.setItem('tutorLessonNotes', JSON.stringify(lessonNotes));
             updateUI();
+
             if(db) {
-                try { await setDoc(doc(db, 'tutor', 'master'), { students }); }
+                try {
+                    await setDoc(doc(db, 'tutor', 'master'), {
+                        students: students,
+                        monthThemes: monthThemes,
+                        lessonNotes: lessonNotes
+                    }, { merge: true });
+                }
                 catch(e) { console.error("Could not sync to cloud"); }
             }
         }
