@@ -174,7 +174,10 @@
         .summary-item strong { color: var(--pastel-purple); }
 
         .income-table { background: #fff; border-radius: 12px; overflow: hidden; border: 2px dashed var(--pastel-blue); margin-bottom: 20px; }
-        .table-row { display: grid; grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 1.2fr; gap: 0; border-bottom: 1px dashed var(--pastel-blue); padding: 12px; align-items: center; }
+        
+        /* UPDATED: Added space for the delete button column */
+        .table-row { display: grid; grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 1.2fr 0.5fr; gap: 0; border-bottom: 1px dashed var(--pastel-blue); padding: 12px; align-items: center; }
+        
         .table-header { background: var(--pastel-blue); font-weight: 700; color: var(--text-main); }
         .table-row:hover { background: rgba(255,255,255,0.9); }
         .table-cell { padding: 0 8px; font-size: 0.85rem; }
@@ -320,7 +323,21 @@
                 </div>
             </div>
 
-            <h4 style="color: var(--pastel-purple); margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px;">📊 Student Payment Tracking</h4>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; border-bottom: 2px dashed var(--pastel-pink); padding-bottom: 10px; margin-bottom: 15px;">
+                <h4 style="color: var(--pastel-purple); margin: 0;">📊 Student Payment Tracking</h4>
+                
+                <div style="display: flex; gap: 10px;">
+                    <select id="incomeStatusFilter" onchange="applyIncomeFilter()" style="margin: 0; padding: 5px; width: auto; font-size: 0.85rem;">
+                        <option value="all">All Statuses</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                    <select id="incomeCourseFilter" onchange="applyIncomeFilter()" style="margin: 0; padding: 5px; width: auto; font-size: 0.85rem;">
+                        <option value="all">All Courses</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="income-table">
                 <div class="table-row table-header">
                     <div class="table-cell">Student</div>
@@ -329,6 +346,7 @@
                     <div class="table-cell">Rate</div>
                     <div class="table-cell">Total</div>
                     <div class="table-cell">Status</div>
+                    <div class="table-cell"></div>
                 </div>
                 <div id="incomeTableBody"></div>
             </div>
@@ -454,6 +472,9 @@
         let incomeDate = new Date();
         let selectedFilters = { schools: [], grades: [], courses: [] };
         let currentInvoiceText = '';
+        
+        // UPDATED: Added Income Filter State
+        let currentIncomeFilter = { status: 'all', course: 'all' };
 
         // --- FIREBASE INIT ---
         let db;
@@ -585,7 +606,6 @@
                 const dateStr = selectedDate.toDateString();
                 const isAttended = s.sessions && s.sessions.includes(dateStr);
                 
-                // Keep selectedAttendance initialized just in case, but it's not strictly needed anymore
                 selectedAttendance[name] = isAttended; 
 
                 const rateDisplay = s.rateType === 'hour' ? `$${s.rate}/h (${s.hoursPerSession}h)` : `$${s.rate}/session`;
@@ -603,7 +623,6 @@
             const dateStr = selectedDate.toDateString();
             let saved = false;
 
-            // Find all the checkboxes currently on the screen
             const checkboxes = document.querySelectorAll('#attendanceStudentsList input[type="checkbox"]');
 
             if (checkboxes.length === 0) {
@@ -611,21 +630,17 @@
                 return;
             }
 
-            // Go through each checkbox one by one
             checkboxes.forEach(checkbox => {
-                // The ID is formatted as "check-StudentName", so we remove "check-" to get the name
                 const name = checkbox.id.replace('check-', '');
                 const isCurrentlyChecked = checkbox.checked;
 
                 if (!students[name].sessions) students[name].sessions = [];
                 const wasAttended = students[name].sessions.includes(dateStr);
 
-                // If checked on screen but not in database -> Add it
                 if (isCurrentlyChecked && !wasAttended) {
                     students[name].sessions.push(dateStr);
                     saved = true;
                 }
-                // If unchecked on screen but is in database -> Remove it
                 else if (!isCurrentlyChecked && wasAttended) {
                     const idx = students[name].sessions.indexOf(dateStr);
                     if (idx > -1) {
@@ -816,6 +831,31 @@
         };
 
         // --- INCOME LOGIC ---
+        // UPDATED: Added Income Filtering Logic and Delete Function
+        window.applyIncomeFilter = () => {
+            currentIncomeFilter.status = document.getElementById('incomeStatusFilter').value;
+            currentIncomeFilter.course = document.getElementById('incomeCourseFilter').value;
+            renderIncomeStatement();
+        };
+
+        window.deleteIncomeEntry = async (name, year, month) => {
+            if (confirm(`Are you sure you want to delete all ${month + 1}/${year} logged sessions for ${name}? This will remove the income entry.`)) {
+                students[name].sessions = students[name].sessions.filter(dateStr => {
+                    const d = new Date(dateStr);
+                    return !(d.getFullYear() === year && d.getMonth() === month);
+                });
+                
+                const key = `${year}-${month}`;
+                if (students[name].paid && students[name].paid[key]) {
+                    delete students[name].paid[key];
+                }
+
+                await save();
+                renderIncomeStatement();
+                showMsg(`Deleted month records for ${name}. 🗑️`);
+            }
+        };
+
         window.renderIncomeStatement = () => {
             const y = incomeDate.getFullYear(), m = incomeDate.getMonth();
             document.getElementById('incomeMonthDisplay').innerText = `${new Intl.DateTimeFormat('en-US', {month:'long'}).format(incomeDate)} ${y}`;
@@ -855,7 +895,6 @@
                         isPaid: isPaid
                     });
 
-                    // Add to totals regardless of payment status
                     totalIncome += sessionIncome;
                     totalSessions += monthSessions.length;
                 }
@@ -865,8 +904,26 @@
             document.getElementById('totalIncome').innerText = `$${totalIncome.toFixed(2)}`;
             document.getElementById('avgPerSession').innerText = totalSessions > 0 ? `$${(totalIncome / totalSessions).toFixed(2)}` : '$0.00';
 
+            // UPDATED: Populate dynamic Course Filter
+            const courses = new Set(incomeData.map(item => item.course));
+            const courseSelect = document.getElementById('incomeCourseFilter');
+            const currentCourseSelection = courseSelect.value;
+            courseSelect.innerHTML = '<option value="all">All Courses</option>' + 
+                Array.from(courses).map(c => `<option value="${c}">${c}</option>`).join('');
+            courseSelect.value = courses.has(currentCourseSelection) ? currentCourseSelection : 'all';
+
+            // UPDATED: Apply the filters to our data
+            const filteredData = incomeData.filter(item => {
+                const matchStatus = currentIncomeFilter.status === 'all' || 
+                                    (currentIncomeFilter.status === 'paid' && item.isPaid) ||
+                                    (currentIncomeFilter.status === 'pending' && !item.isPaid);
+                const matchCourse = currentIncomeFilter.course === 'all' || item.course === currentIncomeFilter.course;
+                return matchStatus && matchCourse;
+            });
+
+            // UPDATED: Render Table Rows with Delete Button
             let tableHTML = '';
-            incomeData.sort((a, b) => b.income - a.income).forEach(item => {
+            filteredData.sort((a, b) => b.income - a.income).forEach(item => {
                 const paidCheckId = `paid-${item.name}-${y}-${m}`;
                 const paidStatus = item.isPaid ? '✅ Paid' : '⏳ Pending';
                 tableHTML += `
@@ -876,9 +933,12 @@
                         <div class="table-cell">${item.sessions}</div>
                         <div class="table-cell">${item.rateDisplay}</div>
                         <div class="table-cell"><strong>$${item.income.toFixed(2)}</strong></div>
-                        <div class="table-cell">
+                        <div class="table-cell" style="display:flex; align-items:center;">
                             <input type="checkbox" id="${paidCheckId}" ${item.isPaid ? 'checked' : ''} onchange="togglePaymentStatus('${item.name}', ${y}, ${m})" style="margin-right: 5px;">
                             <span style="font-size: 0.75rem; color: ${item.isPaid ? '#81b29a' : '#d14949'};">${paidStatus}</span>
+                        </div>
+                        <div class="table-cell" style="text-align: center;">
+                            <button class="delete-btn" style="position:static; margin:0 auto; display:inline-flex;" onclick="deleteIncomeEntry('${item.name}', ${y}, ${m})" title="Delete month logs">✖</button>
                         </div>
                     </div>
                 `;
@@ -888,7 +948,7 @@
 
             // Render invoice section
             let invoiceHTML = '';
-            incomeData.forEach(item => {
+            filteredData.forEach(item => {
                 const dates = item.monthSessions.map(dateStr => {
                     const d = new Date(dateStr);
                     return `${d.getDate()}/${d.getMonth() + 1}`;
@@ -929,19 +989,7 @@
         };
 
         window.generateInvoice = (firstName, fullName, dates, sessions, rate, total) => {
-            const invoiceMessage = `Dear ${firstName}'s parents,
-
-${firstName} has attended classes on: ${dates}
-Total Sessions: ${sessions}
-Rate: ${rate}
-Total Amount Due: $${total}
-
-Please transfer the fee through:
-• FPS
-• Payme
-• AlipayHK
-
-Thank you!`;
+            const invoiceMessage = `Dear ${firstName}'s parents,\n\n${firstName} has attended classes on: ${dates}\nTotal Sessions: ${sessions}\nRate: ${rate}\nTotal Amount Due: $${total}\n\nPlease transfer the fee through:\n• FPS\n• Payme\n• AlipayHK\n\nThank you!`;
 
             currentInvoiceText = invoiceMessage;
             document.getElementById('invoiceMessageContainer').innerHTML = `<div class="invoice-text">${invoiceMessage}</div>`;
